@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Manager {
 
-    private static int id;
+    private  int id;
 
 
     private final HashMap<Integer, Task> tasks = new HashMap<>();
@@ -53,7 +53,7 @@ public class Manager {
     }
 
     public void deleteEpicById(int Id) {
-        Epic epic = epics.get(Id);
+        Epic epic = epics.remove(Id);
         if (epic != null) {
             for (Integer subTaskId : epic.getSubtaskIds()) {
                 subTasks.remove(subTaskId);
@@ -66,7 +66,7 @@ public class Manager {
     }
 
     public void deleteSubTaskById(int Id) {
-        SubTask subTask = subTasks.get(Id);
+        SubTask subTask = subTasks.remove(Id);
 
         if (subTask != null) {
             Epic epic = epics.get(subTask.getEpicId());
@@ -77,7 +77,6 @@ public class Manager {
             System.out.println("SubTask not found");
         }
     }
-
 
     public void deleteAllTasks() {
         tasks.clear();
@@ -111,7 +110,7 @@ public class Manager {
     public List<Task> getAllTask() {
         if (tasks.size() == 0) {
             System.out.println("Task list is empty");
-            return Collections.emptyList();
+
         }
         return new ArrayList<>(tasks.values());
     }
@@ -119,7 +118,7 @@ public class Manager {
     public List<Epic> getAllEpic() {
         if (epics.size() == 0) {
             System.out.println("Epic list is empty");
-            return Collections.emptyList();
+
         }
         return new ArrayList<>(epics.values());
     }
@@ -127,7 +126,7 @@ public class Manager {
     public List<SubTask> getAllSubTask() {
         if (subTasks.size() == 0) {
             System.out.println("SubTask list is empty");
-            return Collections.emptyList();
+
         }
         return new ArrayList<>(subTasks.values());
     }
@@ -163,7 +162,7 @@ public class Manager {
 
     public void updateStatusEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
-            if (epic.getSubtaskIds().size() == 0) {
+            if (epic.getSubtaskIds().isEmpty()) {
                 epic.setStatus(Status.NEW.getTranslation());
             } else {
                 List<SubTask> subtasksNew = new ArrayList<>();
