@@ -1,6 +1,86 @@
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Поехали!");
+        Manager manager = new Manager();
+
+        System.out.println("*** Task ***");
+        System.out.println("--- Create task ---");
+        manager.createTask(new Task("Описание-1", "Task-1", Status.NEW.getTranslation()));
+        manager.createTask(new Task("Описание-2", "Task-2", Status.NEW.getTranslation()));
+        manager.printTasks();
+        System.out.println("--- Get all tasks ---");
+        List<Task> taskList = manager.getAllTask();
+        System.out.println(taskList);
+        System.out.println("--- Get task by id ---");
+        Task task = manager.getTaskById(1);
+        System.out.println(task);
+        System.out.println("--- Update task ---");
+        task.setStatus(Status.IN_PROGRESS.getTranslation());
+        manager.updateTask(task);
+        System.out.println(task);
+        System.out.println();
+
+        System.out.println("*** Epic ***");
+        System.out.println("--- Create epic ---");
+        manager.createEpic(new Epic("Описание-1", "Epic-1", Status.NEW.getTranslation()));
+        manager.createEpic(new Epic("Описание-2", "Epic-2", Status.NEW.getTranslation()));
+        manager.printEpics();
+        System.out.println("--- Get all epics ---");
+        List<Epic> epics = manager.getAllEpic();
+        System.out.println(epics);
+        System.out.println("--- Get epic by id ---");
+        Epic epic = manager.getEpicById(3);
+        System.out.println(epic);
+        System.out.println("--- Update epic ---");
+        epic.setStatus(Status.IN_PROGRESS.getTranslation());
+        manager.updateEpic(epic);
+        Epic epic3 = manager.getEpicById(3);
+        System.out.println(epic3);
+        System.out.println();
+
+        System.out.println("*** Subtask ***");
+        System.out.println("--- Create subtask ---");
+        manager.createSubTask(new SubTask("Описание-1", "Subtask-1", Status.NEW.getTranslation(), 3));
+        manager.createSubTask(new SubTask("Описание-2", "Subtask-2", Status.NEW.getTranslation(), 3));
+        manager.createSubTask(new SubTask("Описание-3", "Subtask-3", Status.NEW.getTranslation(), 4));
+        manager.createSubTask(new SubTask("Описание-4", "Subtask-4", Status.NEW.getTranslation(), 4));
+        manager.printSubTask();
+        System.out.println("--- Get all subtasks by epic id ---");
+        List<SubTask> subtasksByEpicId = manager.getAllSubTaskByEpicId(3);
+        System.out.println(subtasksByEpicId);
+        System.out.println("--- Get all subtasks ---");
+        List<SubTask> subtasks = manager.getAllSubTask();
+        System.out.println(subtasks);
+        System.out.println("--- Get subtask by id ---");
+        SubTask subtask = manager.getSubTaskById(5);
+        System.out.println(subtask);
+        System.out.println("--- Update subtask ---");
+        subtask.setStatus(Status.IN_PROGRESS.getTranslation());
+        manager.updateSubtask(subtask);
+        System.out.println(subtask);
+        System.out.println();
+
+        System.out.println("*** Delete ***");
+        System.out.println("--- Delete task by id ---");
+        manager.deleteTaskById(1);
+        System.out.println(taskList);
+        System.out.println("--- Delete all tasks ---");
+        manager.deleteAllTasks();
+        manager.printTasks();
+        System.out.println("--- Delete subtask by id ---");
+        manager.deleteSubTaskById(5);
+        manager.printSubTask();
+        System.out.println("--- Delete all subtasks ---");
+        manager.deleteAllSubTask();
+        manager.printSubTask();
+        System.out.println("--- Delete epic by id ---");
+        manager.deleteEpicById(4);
+        manager.printEpics();
+        System.out.println("--- Delete all epics ---");
+        manager.deleteAllEpics();
+        manager.printEpics();
+
     }
 }
