@@ -2,8 +2,7 @@ import java.util.*;
 
 public class Manager {
 
-    private  int id;
-
+    private int id;
 
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
@@ -108,7 +107,7 @@ public class Manager {
     }
 
     public List<Task> getAllTask() {
-        if (tasks.size() == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("Task list is empty");
 
         }
@@ -161,9 +160,8 @@ public class Manager {
     }
 
     public void updateStatusEpic(Epic epic) {
-        if (epics.containsKey(epic.getId())) {
             if (epic.getSubtaskIds().isEmpty()) {
-                epic.setStatus(Status.NEW.getTranslation());
+                epic.setStatus(Status.NEW);
             } else {
                 List<SubTask> subtasksNew = new ArrayList<>();
                 int countDone = 0;
@@ -172,7 +170,6 @@ public class Manager {
                 for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
                     subtasksNew.add(subTasks.get(epic.getSubtaskIds().get(i)));
                 }
-
                 for (SubTask subTask : subtasksNew) {
                     if (subTask.getStatus().equals(Status.DONE.getTranslation())) {
                         countDone++;
@@ -181,22 +178,19 @@ public class Manager {
                         countNew++;
                     }
                     if (subTask.getStatus().equals(Status.IN_PROGRESS.getTranslation())) {
-                        epic.setStatus(Status.IN_PROGRESS.getTranslation());
+                        epic.setStatus(Status.IN_PROGRESS);
                         return;
                     }
                 }
 
                 if (countDone == epic.getSubtaskIds().size()) {
-                    epic.setStatus(Status.DONE.getTranslation());
+                    epic.setStatus(Status.DONE);
                 } else if (countNew == epic.getSubtaskIds().size()) {
-                    epic.setStatus(Status.NEW.getTranslation());
+                    epic.setStatus(Status.NEW);
                 } else {
-                    epic.setStatus(Status.IN_PROGRESS.getTranslation());
+                    epic.setStatus(Status.IN_PROGRESS);
                 }
             }
-        } else {
-            System.out.println("Epic not found");
-        }
     }
 
     public void updateSubtask(SubTask subTask) {
