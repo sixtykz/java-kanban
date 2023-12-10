@@ -50,7 +50,7 @@ public interface TaskManager {
     void changeStatusSubtask(int id, Status status);
 
     ArrayList<Integer> getSubtaskList(int epicId);
-    
+
     void updateEpicStatus(int epicId);
 
     List<Task> historyList();

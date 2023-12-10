@@ -29,7 +29,7 @@ public class Main {
             printMenu();
             int userInput = scanner.nextInt();
             switch (userInput) {
-                case 1: // Получение всех задач
+                case 1:
                     printMenuCase1();
                     int userInputCase1 = scanner.nextInt();
                     switch (userInputCase1) {
@@ -40,9 +40,7 @@ public class Main {
                             inMemoryTaskManager.addEpic(epic1);
                             break;
                         case 3:
-                            // подразумевается, что подзадача добавляется только после внесении эпика в мапу (из-за
-                            // невомозожности взять epicId до этого момента, так как id теперь присваиваются в
-                            // менеджере)
+
                             Subtask subtask1 = new Subtask("тест1", "Собрать коробки", Status.NEW, epic1.getId());
                             Subtask subtask2 = new Subtask("тест2", "Упаковать кошку", Status.NEW, epic1.getId());
                             Subtask subtask3 = new Subtask("тест3", "Сказать слова прощания", Status.NEW,
@@ -61,7 +59,7 @@ public class Main {
                     }
                     break;
 
-                case 2: // Получение всех задач
+                case 2:
                     printMenuCase2();
                     int userInputCase2 = scanner.nextInt();
                     switch (userInputCase2) {
@@ -77,7 +75,7 @@ public class Main {
                     }
                     break;
 
-                case 3: // Удаление всех задач
+                case 3:
                     printMenuCase3();
                     int userInputCase3 = scanner.nextInt();
                     switch (userInputCase3) {
@@ -93,7 +91,7 @@ public class Main {
                     }
                     break;
 
-                case 4: // получение по id
+                case 4:
                     printMenuCase4();
                     int userInputCase4 = scanner.nextInt();
                     System.out.println("Введите номер идентификатора");
@@ -111,11 +109,11 @@ public class Main {
                     }
                     break;
 
-                case 5: // обновление по id
+                case 5:
                     printMenuCase5();
                     int userInputCase5 = scanner.nextInt();
                     System.out.println("Введите номер идентификатора той задачи которую хотите обновить");
-                    int update = scanner.nextInt(); // update1 нужно внести в id задачи
+                    int update = scanner.nextInt();
                     switch (userInputCase5) {
                         case 1:
 
@@ -124,15 +122,13 @@ public class Main {
 
                             break;
                         case 3:
-                            // Помимо id задачи который хотим заменить нужен также id эпика для обновление списка
-                            // поэтому подразумевается что епик уже занесен в мапу
                             Subtask subtaskTest2 = new Subtask(update, "TEST", "TEST", Status.NEW, epic1.getId());
                             inMemoryTaskManager.updateSubtask(subtaskTest2);
                             break;
                     }
                     break;
 
-                case 6: // Удаление по идентификатору.
+                case 6:
                     printMenuCase6();
                     int userInputCase6 = scanner.nextInt();
                     System.out.println("Введите идентификатор для удаления");
@@ -150,7 +146,7 @@ public class Main {
                     }
                     break;
 
-                case 7: // Изменить статус
+                case 7:
                     printMenuCase7();
                     int statusChange = scanner.nextInt();
                     System.out.println("Введите id задачи, чей статус хотите поменять");
@@ -172,19 +168,18 @@ public class Main {
                     inMemoryTaskManager.changeStatusSubtask(statusId, status7);
                     break;
 
-                case 8: // Получение списка всех подзадач определённого эпика.
+                case 8:
                     System.out.println("Получение списка всех подзадач определённого эпика\n" + "Введите id эпика, чтобы получить его подзадачи");
                     int epicId = scanner.nextInt();
                     System.out.println(inMemoryTaskManager.getSubtaskList(epicId));
                     break;
 
-                // ТЗ-4
-                case 9: // Информация по просмотрам.
+                case 9:
                     System.out.println("Какие задачи были просмотрены:");
                     System.out.println(inMemoryTaskManager.historyList());
                     break;
 
-                case 0: // Выход
+                case 0:
                     menu = false;
                     break;
             }
