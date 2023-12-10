@@ -1,246 +1,94 @@
 package main.java;
 
-import main.java.intefaces.TaskManager;
-import main.java.service.*;
-import main.java.tasks.*;
+import main.java.service.InMemoryTaskManager;
+import main.java.tasks.Epic;
+import main.java.tasks.Status;
+import main.java.tasks.Subtask;
+import main.java.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
-        TaskManager inMemoryTaskManager;
-        inMemoryTaskManager = Managers.getDefault();
+        System.out.println("*** Task ***");
+        System.out.println("--- Create task ---");
+        manager.createTask(new Task("Описание-1", "Task-1", Status.NEW));
+        manager.createTask(new Task("Описание-2", "Task-2", Status.NEW));
+        manager.printTasks();
+        System.out.println("--- Get all tasks ---");
+        List<Task> taskList = manager.getAllTask();
+        System.out.println(taskList);
+        System.out.println("--- Get task by id ---");
+        Task task = manager.getTaskById(1);
+        System.out.println(task);
+        System.out.println("--- Update task ---");
+        task.setStatus(Status.IN_PROGRESS);
+        manager.updateTask(task);
+        System.out.println(task);
+        System.out.println();
 
+        System.out.println("*** Epic ***");
+        System.out.println("--- Create epic ---");
+        manager.createEpic(new Epic("Описание-1", "Epic-1", Status.NEW));
+        manager.createEpic(new Epic("Описание-2", "Epic-2", Status.NEW));
+        manager.printEpics();
+        System.out.println("--- Get all epics ---");
+        List<Epic> epics = manager.getAllEpic();
+        System.out.println(epics);
+        System.out.println("--- Get epic by id ---");
+        Epic epic = manager.getEpicById(3);
+        System.out.println(epic);
+        System.out.println("--- Update epic ---");
+        epic.setStatus(Status.IN_PROGRESS);
+        manager.updateEpic(epic);
+        Epic epic3 = manager.getEpicById(3);
+        System.out.println(epic3);
+        System.out.println();
 
-        Task task1 = new Task("Переезд", "Собрать коробки", Status.NEW);
-        Task task2 = new Task("Переезд", "Упаковать кошку", Status.NEW);
-        Task task3 = new Task("Переезд", "Сказать слова прощания", Status.NEW);
+        System.out.println("*** Subtask ***");
+        System.out.println("--- Create subtask ---");
+        manager.createSubTask(new Subtask("Описание-1", "Subtask-1", Status.NEW, 3));
+        manager.createSubTask(new Subtask("Описание-2", "Subtask-2", Status.NEW, 3));
+        manager.createSubTask(new Subtask("Описание-3", "Subtask-3", Status.NEW, 4));
+        manager.createSubTask(new Subtask("Описание-4", "Subtask-4", Status.NEW, 4));
+        manager.printSubTask();
+        System.out.println("--- Get all subtasks by epic id ---");
+        List<Subtask> subtasksByEpicId = manager.getAllSubTaskByEpicId(3);
+        System.out.println(subtasksByEpicId);
+        System.out.println("--- Get all subtasks ---");
+        List<Subtask> subtasks = manager.getAllSubTask();
+        System.out.println(subtasks);
+        System.out.println("--- Get subtask by id ---");
+        Subtask subtask = manager.getSubTaskById(5);
+        System.out.println(subtask);
+        System.out.println("--- Update subtask ---");
+        subtask.setStatus(Status.IN_PROGRESS);
+        manager.updateSubtask(subtask);
+        System.out.println(subtask);
+        System.out.println();
 
-        Epic epic1 = new Epic("Переезд", "Переезд", Status.NEW, new ArrayList<>());
+        System.out.println("*** Delete ***");
+        System.out.println("--- Delete task by id ---");
+        manager.deleteTaskById(1);
+        System.out.println(taskList);
+        System.out.println("--- Delete all tasks ---");
+        manager.deleteAllTasks();
+        manager.printTasks();
+        System.out.println("--- Delete subtask by id ---");
+        manager.deleteSubTaskById(5);
+        manager.printSubTask();
+        System.out.println("--- Delete all subtasks ---");
+        manager.deleteAllSubTask();
+        manager.printSubTask();
+        System.out.println("--- Delete epic by id ---");
+        manager.deleteEpicById(4);
+        manager.printEpics();
+        System.out.println("--- Delete all epics ---");
+        manager.deleteAllEpics();
+        manager.printEpics();
 
-        Task taskTest = new Task("Тест", "Тест", Status.NEW);
-        Epic epicTest = new Epic("TEST", "TEST", Status.NEW, new ArrayList<>());
-
-        boolean menu = true;
-        while (menu) {
-            printMenu();
-            int userInput = scanner.nextInt();
-            switch (userInput) {
-                case 1:
-                    printMenuCase1();
-                    int userInputCase1 = scanner.nextInt();
-                    switch (userInputCase1) {
-                        case 1:
-                            inMemoryTaskManager.addTask(task1);
-                            break;
-                        case 2:
-                            inMemoryTaskManager.addEpic(epic1);
-                            break;
-                        case 3:
-
-                            Subtask subtask1 = new Subtask("тест1", "Собрать коробки", Status.NEW, epic1.getId());
-                            Subtask subtask2 = new Subtask("тест2", "Упаковать кошку", Status.NEW, epic1.getId());
-                            Subtask subtask3 = new Subtask("тест3", "Сказать слова прощания", Status.NEW,
-                                    epic1.getId());
-                            Subtask subtask4 = new Subtask("тест4", "Собрать коробки", Status.NEW, epic1.getId());
-                            Subtask subtask5 = new Subtask("тест5", "Упаковать кошку", Status.NEW, epic1.getId());
-                            Subtask subtask6 = new Subtask("тест6", "Сказать слова прощания", Status.NEW,
-                                    epic1.getId());
-                            inMemoryTaskManager.addSubtask(subtask1);
-                            inMemoryTaskManager.addSubtask(subtask2);
-                            inMemoryTaskManager.addSubtask(subtask3);
-                            inMemoryTaskManager.addSubtask(subtask4);
-                            inMemoryTaskManager.addSubtask(subtask5);
-                            inMemoryTaskManager.addSubtask(subtask6);
-                            break;
-                    }
-                    break;
-
-                case 2:
-                    printMenuCase2();
-                    int userInputCase2 = scanner.nextInt();
-                    switch (userInputCase2) {
-                        case 1:
-                            System.out.println(inMemoryTaskManager.getTasks());
-                            break;
-                        case 2:
-                            System.out.println(inMemoryTaskManager.getEpics());
-                            break;
-                        case 3:
-                            System.out.println(inMemoryTaskManager.getSubtasks());
-                            break;
-                    }
-                    break;
-
-                case 3:
-                    printMenuCase3();
-                    int userInputCase3 = scanner.nextInt();
-                    switch (userInputCase3) {
-                        case 1:
-                            inMemoryTaskManager.taskClean();
-                            break;
-                        case 2:
-                            inMemoryTaskManager.epicClean();
-                            break;
-                        case 3:
-                            inMemoryTaskManager.subtaskClean();
-                            break;
-                    }
-                    break;
-
-                case 4:
-                    printMenuCase4();
-                    int userInputCase4 = scanner.nextInt();
-                    System.out.println("Введите номер идентификатора");
-                    int taskId = scanner.nextInt();
-                    switch (userInputCase4) {
-                        case 1:
-                            System.out.println(inMemoryTaskManager.getTaskById(taskId));
-                            break;
-                        case 2:
-                            System.out.println(inMemoryTaskManager.getEpicById(taskId));
-                            break;
-                        case 3:
-                            System.out.println(inMemoryTaskManager.getSubtaskById(taskId));
-                            break;
-                    }
-                    break;
-
-                case 5:
-                    printMenuCase5();
-                    int userInputCase5 = scanner.nextInt();
-                    System.out.println("Введите номер идентификатора той задачи которую хотите обновить");
-                    int update = scanner.nextInt();
-                    switch (userInputCase5) {
-                        case 1:
-
-                            break;
-                        case 2:
-
-                            break;
-                        case 3:
-                            Subtask subtaskTest2 = new Subtask(update, "TEST", "TEST", Status.NEW, epic1.getId());
-                            inMemoryTaskManager.updateSubtask(subtaskTest2);
-                            break;
-                    }
-                    break;
-
-                case 6:
-                    printMenuCase6();
-                    int userInputCase6 = scanner.nextInt();
-                    System.out.println("Введите идентификатор для удаления");
-                    int idRemove = scanner.nextInt();
-                    switch (userInputCase6) {
-                        case 1:
-                            inMemoryTaskManager.removeTaskById(idRemove);
-                            break;
-                        case 2:
-                            inMemoryTaskManager.removeEpicById(idRemove);
-                            break;
-                        case 3:
-                            inMemoryTaskManager.removeSubtaskById(idRemove);
-                            break;
-                    }
-                    break;
-
-                case 7:
-                    printMenuCase7();
-                    int statusChange = scanner.nextInt();
-                    System.out.println("Введите id задачи, чей статус хотите поменять");
-                    int statusId = scanner.nextInt();
-                    System.out.println("Назначьте статус, где:\n1 - Задача новая\n" + "2 - Задача выполнена\n3 - Задача в действии");
-                    int check = scanner.nextInt();
-                    Status status7 = null;
-                    switch (check) {
-                        case 1:
-                            status7 = Status.NEW;
-                            break;
-                        case 2:
-                            status7 = Status.DONE;
-                            break;
-                        case 3:
-                            status7 = Status.IN_PROGRESS;
-                            break;
-                    }
-                    inMemoryTaskManager.changeStatusSubtask(statusId, status7);
-                    break;
-
-                case 8:
-                    System.out.println("Получение списка всех подзадач определённого эпика\n" + "Введите id эпика, чтобы получить его подзадачи");
-                    int epicId = scanner.nextInt();
-                    System.out.println(inMemoryTaskManager.getSubtaskList(epicId));
-                    break;
-
-                case 9:
-                    System.out.println("Какие задачи были просмотрены:");
-                    System.out.println(inMemoryTaskManager.historyList());
-                    break;
-
-                case 0:
-                    menu = false;
-                    break;
-            }
-        }
     }
-
-    public static void printMenu() {
-        System.out.println("1 - Добавить новую задачу");
-        System.out.println("2 - Получить список всех задач");
-        System.out.println("3 - Удалить все задачи");
-        System.out.println("4 - Получить по идентификатору");
-        System.out.println("5 - Обновить по идентификатору");
-        System.out.println("6 - Удалить по идентификатору");
-        System.out.println("7 - Изменить статус");
-        System.out.println("8 - Получение списка всех подзадач определённого эпика");
-        System.out.println("9 - Информация по просмотрам");
-
-        System.out.println("0 - Выход");
-    }
-
-    public static void printMenuCase1() {
-        System.out.println("1 - Добавить новую задачу");
-        System.out.println("2 - Добавить новый эпик");
-        System.out.println("3 - Добавить новую подзадачу");
-    }
-
-    public static void printMenuCase2() {
-        System.out.println("1 - Получить все задачи");
-        System.out.println("2 - Получить все эпики");
-        System.out.println("3 - Получить все подзадачи");
-    }
-
-    public static void printMenuCase3() {
-        System.out.println("1 - Удалить все задачи");
-        System.out.println("2 - Удалить все эпикови");
-        System.out.println("3 - Удалить все подзадачи");
-    }
-
-    public static void printMenuCase4() {
-        System.out.println("1 - Получить задачу по идентификатору");
-        System.out.println("2 - Получить эпик по идентификатору");
-        System.out.println("3 - Получить подзадачу по идентификатору");
-    }
-
-
-    public static void printMenuCase5() {
-        System.out.println("1 - Обновление задачи по идентификатору");
-        System.out.println("2 - Обновление епика по идентификатору");
-        System.out.println("3 - Обновление подзадачи по идентификатору");
-    }
-
-    public static void printMenuCase6() {
-        System.out.println("1 - Удалить задачу по идентификатору");
-        System.out.println("2 - Удалить епик по идентификатору");
-        System.out.println("3 - Удалить подзадачу по идентификатору");
-    }
-
-    public static void printMenuCase7() {
-        System.out.println("1 - Изменить статус задачи");
-        System.out.println("2 - Изменить статус епика");
-        System.out.println("3 - Изменить статус подзадачи");
-    }
-
-}
+} 

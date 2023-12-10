@@ -3,15 +3,19 @@ package main.java.tasks;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private final ArrayList<Integer> subtasksList;
+    private final ArrayList<Integer> subtasksList = null;
 
-    public Epic(String title, String description, Status status, ArrayList<Integer> subtasksList) {
+    public Epic(String title, String description, Status status) {
         super(title, description, status);
-        this.subtasksList = subtasksList;
+
     }
 
     public ArrayList<Integer> getSubtasksList() {
         return subtasksList;
+    }
+
+    public void setSubtasksList(int id) {
+        subtasksList.add(id);
     }
 
     public void cleanSubtaskIds() {
