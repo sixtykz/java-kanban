@@ -1,14 +1,20 @@
-import java.util.Objects;
+package main.java.tasks;
 
 public class Task {
-
     private int id;
-    private String name;
+    private String title;
     private String description;
     private Status status;
 
-    public Task(String name, String description, Status status) {
-        this.name = name;
+    public Task(String title, String description, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
+
+    public Task(int id, String title, String description, Status status) {
+        this.id = id;
+        this.title = title;
         this.description = description;
         this.status = status;
     }
@@ -21,12 +27,12 @@ public class Task {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -45,15 +51,13 @@ public class Task {
         this.status = status;
     }
 
-
     @Override
     public String toString() {
         return "Task{" +
                 "description='" + description + '\'' +
                 ", id=" + id +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", status=" + status +
                 '}';
     }
-
 }
