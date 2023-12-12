@@ -5,16 +5,19 @@ import main.java.tasks.Task;
 
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
     private final List<Task> historyTasksList = new ArrayList<>();
 
+    static final int cons = 9;
+
 
     public void add(Task task) {
 
-            if (historyTasksList.size() >= 9) {
+            if (historyTasksList.size() >= cons) {
                 historyTasksList.remove(0);
             }
             historyTasksList.add(task);
@@ -22,7 +25,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
 
     public List<Task> getHistory() {
-        return historyTasksList;
+        return List.copyOf(historyTasksList);
     }
 
 }

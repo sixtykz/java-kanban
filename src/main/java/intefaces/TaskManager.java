@@ -56,4 +56,6 @@ public interface TaskManager {
     void printEpics();
 
     void printSubTask();
+
+    List<Task> getHistory();
 }

@@ -256,7 +256,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public List<Task> historyList() {
+    public List<Task> getHistory() {
         List<Task> list = new LinkedList<>();
         for (Task task : historyManager.getHistory()) {
             list.add(task);
