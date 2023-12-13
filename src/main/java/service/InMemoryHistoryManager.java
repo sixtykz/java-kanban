@@ -12,12 +12,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private final List<Task> historyTasksList = new ArrayList<>();
 
-    static final int cons = 9;
+    private static final int MAX_HISTORY_SIZE = 9;
 
 
     public void add(Task task) {
 
-            if (historyTasksList.size() >= cons) {
+            if (historyTasksList.size() >= MAX_HISTORY_SIZE) {
                 historyTasksList.remove(0);
             }
             historyTasksList.add(task);

@@ -76,7 +76,6 @@ public class InMemoryTaskManager implements TaskManager {
             for (Integer subTaskId : epic.getSubtasksList()) {
                 subTasks.remove(subTaskId);
             }
-            epics.remove(Id);
         } else {
             System.out.println("Epic не найден");
         }
@@ -91,7 +90,6 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = epics.get(subTask.getEpicId());
             epic.getSubtasksList().remove((Integer) subTask.getId());
             updateStatusEpic(epic);
-            subTasks.remove(Id);
         } else {
             System.out.println("SubTask не найден");
         }
@@ -208,8 +206,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public void updateStatusEpic(Epic epic) {
+    private void updateStatusEpic(Epic epic) {
         if (epic.getSubtasksList().isEmpty()) {
             epic.setStatus(Status.NEW);
         } else {
@@ -257,11 +254,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public List<Task> getHistory() {
-        List<Task> list = new LinkedList<>();
-        for (Task task : historyManager.getHistory()) {
-            list.add(task);
-        }
-        return list;
+        return historyManager.getHistory();
     }
 
     @Override
