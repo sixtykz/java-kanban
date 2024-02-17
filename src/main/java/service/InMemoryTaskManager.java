@@ -9,7 +9,6 @@ import main.java.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -113,6 +112,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.getSubtasksList().clear();
             updateStatusEpic(epic);
         }
+        tasks.clear();
     }
 
     @Override
@@ -255,6 +255,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public void remove(int id) {
+        historyManager.remove(id);
     }
 
     @Override

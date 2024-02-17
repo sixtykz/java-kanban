@@ -50,6 +50,8 @@ public interface TaskManager {
 
     void updateSubtask(Subtask subTask);
 
+    void remove(int id);
+
     void printTasks();
 
     void printEpics();
