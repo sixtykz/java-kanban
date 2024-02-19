@@ -60,39 +60,44 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteTaskById(int Id) {
-        if (tasks.containsKey(Id)) {
-            tasks.remove(Id);
+    public void deleteTaskById(int id) {
+        if (tasks.containsKey(id)) {
+            tasks.remove(id);
+            historyManager.remove(id);
         } else {
-            System.out.println("Task не найден");
+            System.out.println("Task not found");
         }
     }
 
     @Override
-    public void deleteEpicById(int Id) {
-        Epic epic = epics.remove(Id);
+    public void deleteEpicById(int id) {
+        Epic epic = epics.get(id);
         if (epic != null) {
-            for (Integer subTaskId : epic.getSubtasksList()) {
-                subTasks.remove(subTaskId);
+            for (Integer subtaskId : epic.getSubtasksList()) {
+                subTasks.remove(subtaskId);
+                historyManager.remove(subtaskId);
             }
+            epics.remove(id);
+            historyManager.remove(id);
         } else {
-            System.out.println("Epic не найден");
+            System.out.println("Epic not found");
         }
-
     }
 
     @Override
-    public void deleteSubTaskById(int Id) {
-        Subtask subTask = subTasks.remove(Id);
-
-        if (subTask != null) {
-            Epic epic = epics.get(subTask.getEpicId());
-            epic.getSubtasksList().remove((Integer) subTask.getId());
+    public void deleteSubTaskById(int id) {
+        Subtask subtask = subTasks.get(id);
+        if (subtask != null) {
+            Epic epic = epics.get(subtask.getEpicId());
+            epic.getSubtasksList().remove((Integer) subtask.getId());
             updateStatusEpic(epic);
+            subTasks.remove(id);
+            historyManager.remove(id);
         } else {
-            System.out.println("SubTask не найден");
+            System.out.println("Subtask not found");
         }
     }
+
 
     @Override
     public void deleteAllTasks() {
@@ -101,8 +106,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
-        epics.clear();
         subTasks.clear();
+        epics.clear();
     }
 
     @Override
@@ -112,7 +117,6 @@ public class InMemoryTaskManager implements TaskManager {
             epic.getSubtasksList().clear();
             updateStatusEpic(epic);
         }
-        tasks.clear();
     }
 
     @Override
@@ -252,15 +256,16 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("SubTask не найден");
         }
     }
+    //не совсем понял ваши комментарии по вашему методу, может я чего не вижу, но ведь метод remove нам дан в самой подсказке к тз
+    @Override
+    public void remove(int id) {
+        historyManager.remove(id);
+    }
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
-    @Override
-    public void remove(int Id) {
-        historyManager.remove(Id);
-    }
 
     @Override
     public void printTasks() {
