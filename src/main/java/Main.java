@@ -15,13 +15,13 @@ public class Main {
 
         System.out.println("*** Test History ***");
         System.out.println("--- Create ---");
-        manager.createTask(new Task("Описание-1", "Task-1", Status.NEW)); // id 1
-        manager.createTask(new Task("Описание-2", "Task-2", Status.NEW)); // id 2
-        manager.createEpic(new Epic("Описание-1", "Epic-1", Status.NEW)); // id 3
-        manager.createEpic(new Epic("Описание-1", "Epic-2", Status.NEW)); // id 4
-        manager.createSubTask(new Subtask("Описание-1", "Subtask-1", Status.NEW, 3)); // id 5
-        manager.createSubTask(new Subtask("Описание-2", "Subtask-2", Status.NEW, 3)); // id 6
-        manager.createSubTask(new Subtask("Описание-3", "Subtask-3", Status.NEW, 3)); // id 7
+        manager.createTask(new Task("Описание-1", "Task-1", Status.NEW));
+        manager.createTask(new Task("Описание-2", "Task-2", Status.NEW));
+        manager.createEpic(new Epic("Описание-1", "Epic-1", Status.NEW));
+        manager.createEpic(new Epic("Описание-1", "Epic-2", Status.NEW));
+        manager.createSubTask(new Subtask("Описание-1", "Subtask-1", Status.NEW, 3));
+        manager.createSubTask(new Subtask("Описание-2", "Subtask-2", Status.NEW, 3));
+        manager.createSubTask(new Subtask("Описание-3", "Subtask-3", Status.NEW, 3));
 
         System.out.println("--- Get By Id ---");
         manager.getTaskById(1);
@@ -59,7 +59,6 @@ public class Main {
         System.out.println(history);
 
         System.out.println("--- Remove from history ---");
-        manager.remove(1);
         manager.deleteEpicById(3);
 
         List<Task> historyAfterRemove = manager.getHistory();
