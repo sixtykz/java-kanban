@@ -6,14 +6,15 @@ public class Task {
     private String description;
     private Status status;
 
-    public Task(String title, String description, Status status) {
+
+    public Task(int id, String title, String description, Status status) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
     }
 
-    public Task(int id, String title, String description, Status status) {
-        this.id = id;
+    public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -59,5 +60,9 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public boolean toCSV() {
+        return true;
     }
 }

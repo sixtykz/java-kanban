@@ -1,15 +1,101 @@
 package main.java.service;
 
 import main.java.intefaces.HistoryManager;
-import main.java.intefaces.TaskManager;
 import main.java.tasks.Epic;
 import main.java.tasks.Status;
 import main.java.tasks.Subtask;
 import main.java.tasks.Task;
 
+import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class InMemoryTaskManager implements TaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
+
+    private String title;
+
+    private static File file;
+
+    public void FileBackedTaskManager(File file) {
+        this.file = file;
+        load();
+    }
+
+    private void load() {
+        if (file.exists()) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] data = line.split(",");
+                    if (data.length == 6) {
+                        int id = Integer.parseInt(data[0]);
+                        String type = data[1];
+                        String name = data[2];
+                        Status status = Status.valueOf(data[3].toUpperCase());
+                        String description = data[4];
+                        String epic = data[5];
+
+                        if (type.equals("task")) {
+                            addTask(new Task(id, title, description, status));
+                        } else if (type.equals("subtask")) {
+                            addSubTask(new Subtask(description, name, status, id));
+                        } else if (type.equals("epic")) {
+                            addEpic(new Epic(description, name, status, id));
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void save() {
+        try (PrintWriter writer = new PrintWriter(file)) {
+            for (Task task : tasks.values()) {
+                writer.println(task.toCSV());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addTask(Task task) {
+        super.addTask(task);
+        save();
+    }
+
+    @Override
+    public void addEpic(Epic epic) {
+        super.addEpic(epic);
+        save();
+    }
+
+    @Override
+    public void addSubTask(Subtask subTask) {
+        super.addSubTask(subTask);
+        save();
+    }
+
+    @Override
+    public void completeTask(int taskId) {
+        super.completeTask(taskId);
+        save();
+    }
+
+    @Override
+    public void updateTask(int taskId, String name, Status status, String description) {
+        super.updateTask(taskId, name, status, description);
+        save();
+    }
+
+    @Override
+    public void assignTaskToEpic(int taskId, int epicId) {
+        super.assignTaskToEpic(taskId, epicId);
+        save();
+    }
+
 
     private int id;
 
@@ -19,13 +105,44 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public void assignTaskToEpic(int taskId, int epicId) {
-    }
-
     public int generateId() {
         return id++;
     }
 
+    public static File getFile() {
+        return file;
+    }
+
+    public FileBackedTasksManager(File file) {
+        FileBackedTasksManager.file = file;
+    }
+
+
+    // метод возвращает последнюю строку с просмотренными задачами из файла
+    private List<String> historyFromString(File file) throws IOException {
+        BufferedReader br;
+        List<String> listString = new ArrayList<>();
+        br = new BufferedReader(new FileReader(file));
+        String line = "";
+        while ((line = br.readLine()) != null) {
+            if (line.isEmpty()) {
+                line = br.readLine();
+                break;
+            }
+        }
+        if (line != null && !line.isEmpty()) {
+            listString = Arrays.asList(line.split(","));
+        } else {
+            return listString;
+        }
+        return listString;
+    }
+
+
+    /*private static String historyToString(HistoryManager manager) {
+        return manager.getHistory().stream()
+                .map(Task -> Task.getId().collect(Collectors.joining(","));
+    }*/
     @Override
     public int createTask(Task task) {
         int newTaskId = generateId();
@@ -312,20 +429,5 @@ public class InMemoryTaskManager implements TaskManager {
                     ", status=" + subTask.getStatus() +
                     '}');
         }
-    }
-
-    protected void updateTask(int taskId, String name, Status status, String description) {
-    }
-
-    protected void completeTask(int taskId) {
-    }
-
-    public void addTask(Task task) {
-    }
-
-    public void addEpic(Epic epic) {
-    }
-
-    protected void addSubTask(Subtask subTask) {
     }
 }
