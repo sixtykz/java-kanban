@@ -1,11 +1,13 @@
 package main.java;
 
+import main.java.service.FileBackedTasksManager;
 import main.java.service.InMemoryTaskManager;
 import main.java.tasks.Epic;
 import main.java.tasks.Status;
 import main.java.tasks.Subtask;
 import main.java.tasks.Task;
 
+import java.io.File;
 import java.util.List;
 
 public class Main {
@@ -63,6 +65,16 @@ public class Main {
 
         List<Task> historyAfterRemove = manager.getHistory();
         System.out.println(historyAfterRemove);
+
+        System.out.println("--- saving and uploading an empty file ---");
+        FileBackedTasksManager fileManager = new FileBackedTasksManager(new File("tasks.txt"));
+        fileManager.save();
+
+        System.out.println("--- saving multiple tasks ---");
+        Task task1 = new Task(1, "Task 1", "Description 1", Status.DONE);
+        fileManager.addTask(task1);
+        fileManager.save();
+
     }
 } 
 
