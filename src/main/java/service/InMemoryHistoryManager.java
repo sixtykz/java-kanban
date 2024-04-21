@@ -30,7 +30,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 element.setPrev(null);
             } else {
                 element.setPrev(tail);
-                element.setNext(null);
                 tail.setNext(element);
                 tail = element;
             }

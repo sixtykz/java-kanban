@@ -1,15 +1,18 @@
 package main.java.service;
 
 import main.java.intefaces.HistoryManager;
-import main.java.intefaces.TaskManager;
 import main.java.tasks.Epic;
 import main.java.tasks.Status;
 import main.java.tasks.Subtask;
 import main.java.tasks.Task;
 
+import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class InMemoryTaskManager implements TaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
+
+    private static File file;
 
     private int id;
 
@@ -19,45 +22,103 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public void assignTaskToEpic(int taskId, int epicId) {
-    }
-
     public int generateId() {
         return id++;
     }
 
-    @Override
-    public int createTask(Task task) {
-        int newTaskId = generateId();
-        task.setId(newTaskId);
-        tasks.put(newTaskId, task);
-        return newTaskId;
+    public static File getFile() {
+        return file;
     }
 
-    @Override
-    public int createEpic(Epic epic) {
-        int newEpicId = generateId();
-        epic.setId(newEpicId);
-        epics.put(newEpicId, epic);
-        return newEpicId;
+    public FileBackedTasksManager(File file) {
+        FileBackedTasksManager.file = file;
     }
 
-    @Override
-    public int createSubTask(Subtask subTask) {
-        int newSubTaskId = generateId();
-        subTask.setId(newSubTaskId);
-        Epic epic = epics.get(subTask.getEpicId());
+    public void FileBackedTaskManager(File file) {
+        this.file = file;
+        loadFromFile(file);
+    }
 
-        if (epic != null) {
-            subTasks.put(newSubTaskId, subTask);
-            epic.setSubtasksList(newSubTaskId);
-            updateStatusEpic(epic);
-            return newSubTaskId;
-        } else {
-            System.out.println("Epic не найден");
-            return -1;
+    public enum TaskType {
+        TASK,
+        SUBTASK,
+        EPIC
+    }
+
+
+    public String toString(Task task) {
+        return task.getTitle() + ":" + task.getDescription();
+    }
+
+    public static Task fromString(String value) {
+        String[] parts = value.split(":");
+        TaskType type = TaskType.valueOf(parts[0]);
+        String description = parts[1];
+        return new Task(type, description);
+    }
+
+    public static FileBackedTasksManager loadFromFile(File file) {
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            fileBackedTasksManager = (FileBackedTasksManager) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
+        return fileBackedTasksManager;
+    }
+
+    public class ManagerSaveException extends RuntimeException {
+        public ManagerSaveException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    private void save() {
+        try (PrintWriter writer = new PrintWriter(file)) {
+            for (Task task : tasks.values()) {
+                writer.println(task.toCSV());
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Error saving data", e);
+        }
+    }
+
+    @Override
+    public void addTask(Task task) {
+        super.addTask(task);
+        save();
+    }
+
+    @Override
+    public void addEpic(Epic epic) {
+        super.addEpic(epic);
+        save();
+    }
+
+    @Override
+    public void addSubTask(Subtask subTask) {
+        super.addSubTask(subTask);
+        save();
+    }
+
+    @Override
+    public void completeTask(int taskId) {
+        super.completeTask(taskId);
+        save();
+    }
+
+    @Override
+    public void updateTask(int taskId, String name, Status status, String description) {
+        super.updateTask(taskId, name, status, description);
+        save();
+    }
+
+    @Override
+    public void assignTaskToEpic(int taskId, int epicId) {
+        super.assignTaskToEpic(taskId, epicId);
+        save();
     }
 
     @Override
@@ -312,20 +373,5 @@ public class InMemoryTaskManager implements TaskManager {
                     ", status=" + subTask.getStatus() +
                     '}');
         }
-    }
-
-    protected void updateTask(int taskId, String name, Status status, String description) {
-    }
-
-    protected void completeTask(int taskId) {
-    }
-
-    public void addTask(Task task) {
-    }
-
-    public void addEpic(Epic epic) {
-    }
-
-    protected void addSubTask(Subtask subTask) {
     }
 }

@@ -1,16 +1,19 @@
 package main.java;
 
+import main.java.service.FileBackedTasksManager;
 import main.java.service.InMemoryTaskManager;
 import main.java.tasks.Epic;
 import main.java.tasks.Status;
 import main.java.tasks.Subtask;
 import main.java.tasks.Task;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         InMemoryTaskManager manager = new InMemoryTaskManager();
 
         System.out.println("*** Test History ***");
@@ -63,6 +66,20 @@ public class Main {
 
         List<Task> historyAfterRemove = manager.getHistory();
         System.out.println(historyAfterRemove);
+
+        System.out.println("--- Saving and uploading an empty file ---");
+
+
+        System.out.println("--- Saving multiple tasks ---");
+
+            Task task1 = new Task("Task 1", "Description 1");
+            Task task2 = new Task("Task 2", "Description 2");
+            Task task3 = new Task("Task 3", "Description 3");
+
+            manager.addTask(task1);
+            manager.addTask(task2);
+            manager.addTask(task3);
+
     }
 } 
 

@@ -1,10 +1,20 @@
 package main.java.tasks;
 
+import main.java.service.FileBackedTasksManager;
+
 public class Task {
     private int id;
     private String title;
     private String description;
     private Status status;
+
+
+    public Task(int id, String title, String description, Status status) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
 
     public Task(String title, String description, Status status) {
         this.title = title;
@@ -12,11 +22,10 @@ public class Task {
         this.status = status;
     }
 
-    public Task(int id, String title, String description, Status status) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
+    public Task(FileBackedTasksManager.TaskType type, String description) {
+    }
+
+    public Task(String s, String description) {
     }
 
     public int getId() {
@@ -60,4 +69,9 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
+
+    public boolean toCSV() {
+        return true;
+    }
+
 }
