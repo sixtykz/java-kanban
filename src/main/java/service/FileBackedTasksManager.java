@@ -1,10 +1,8 @@
 package main.java.service;
 
+import main.java.ManagerSaveException;
 import main.java.intefaces.HistoryManager;
-import main.java.tasks.Epic;
-import main.java.tasks.Status;
-import main.java.tasks.Subtask;
-import main.java.tasks.Task;
+import main.java.tasks.*;
 
 import java.io.*;
 import java.util.*;
@@ -13,18 +11,10 @@ import java.util.stream.Collectors;
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static File file;
+    private static File path;
 
-    private int id;
+//убрал отсюда мапы, historyManager и айди
 
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
-
-    public int generateId() {
-        return id++;
-    }
 
     public static File getFile() {
         return file;
@@ -34,51 +24,74 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager.file = file;
     }
 
-    public void FileBackedTaskManager(File file) {
-        this.file = file;
-        loadFromFile(file);
-    }
+// удалил не нужный конструктор
 
-    public enum TaskType {
-        TASK,
-        SUBTASK,
-        EPIC
-    }
+
 
 
     public String toString(Task task) {
         return task.getTitle() + ":" + task.getDescription();
     }
-
+// перенес TaskType в отдельный файл
     public static Task fromString(String value) {
         String[] parts = value.split(":");
         TaskType type = TaskType.valueOf(parts[0]);
         String description = parts[1];
         return new Task(type, description);
     }
-
+// исправил
     public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            fileBackedTasksManager = (FileBackedTasksManager) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (br.ready()) {
+                    Task task = null;
+                    task = task;
+                    final Task task2 = task;
+                    final Task task3 = task;
+                    if (task.getTitle().equals(TaskType.TASK)) {
+                        fileBackedTasksManager.addTask(task);
+                    } else if (task3.getTitle().equals(TaskType.EPIC)) {
+                        fileBackedTasksManager.addEpic((Epic) task3);
+                    } else if (task2.getTitle().equals(TaskType.SUBTASK)) {
+                        fileBackedTasksManager.addSubTask((Subtask) task);
 
+                    }
+
+                    fileBackedTasksManager.getTaskById(task.getId());
+
+                }
+
+            }
+        } catch (IOException exception) {
+            throw new ManagerSaveException(exception.getMessage());
+        }
         return fileBackedTasksManager;
     }
 
-    public class ManagerSaveException extends RuntimeException {
-        public ManagerSaveException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
+   //перенес класс с ManagerSaveException в отдельный файл
 
+    // изменил логику
     private void save() {
         try (PrintWriter writer = new PrintWriter(file)) {
             for (Task task : tasks.values()) {
                 writer.println(task.toCSV());
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Error saving data", e);
+        }
+        try (PrintWriter writer = new PrintWriter(file)) {
+            for (Subtask subtask : subTasks.values()) {
+                writer.println(subtask.toCSV());
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Error saving data", e);
+        }
+        try (PrintWriter writer = new PrintWriter(file)) {
+            for (Epic epic : epics.values()) {
+                writer.println(epic.toCSV());
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Error saving data", e);
@@ -103,275 +116,93 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
+    //убрал не нужный метод public void completeTask(int taskId)
+
+    //убрал не нужный метод public void updateTask(int taskId, String name, Status status, String description)
+
+//изменил логику данного метода
     @Override
-    public void completeTask(int taskId) {
-        super.completeTask(taskId);
+    public void updateEpic(Epic epic) {
+        super.updateEpic(epic);
         save();
     }
 
+   //убрал не нужный метод assignTaskToEpic(int taskId, int epicId)
+
+
+    // убрал updateStatusEpic(Epic epic)
+//изменил логику данного метода
     @Override
-    public void updateTask(int taskId, String name, Status status, String description) {
-        super.updateTask(taskId, name, status, description);
+    public void updateSubtask(Subtask subTask) {
+        super.updateSubtask(subTask);
         save();
     }
 
-    @Override
-    public void assignTaskToEpic(int taskId, int epicId) {
-        super.assignTaskToEpic(taskId, epicId);
-        save();
-    }
-
+    //изменил логику данного метода
     @Override
     public void deleteTaskById(int taskId) {
-        if (tasks.containsKey(taskId)) {
-            tasks.remove(taskId);
-            historyManager.remove(taskId);
-        } else {
-            System.out.println("Task not found");
-        }
+        super.deleteTaskById(taskId);
+        save();
     }
 
+    //изменил логику данного метода
     @Override
     public void deleteEpicById(int epicId) {
-        Epic epic = epics.get(epicId);
-        if (epic != null) {
-            epics.remove(epicId);
-            historyManager.remove(epicId);
-        } else {
-            System.out.println("Epic not found");
-        }
+        super.deleteEpicById(epicId);
+        save();
     }
 
+    //изменил логику данного метода
     @Override
     public void deleteSubTaskById(int subTaskId) {
-        Subtask subtask = subTasks.get(id);
-        if (subtask != null) {
-            Epic epic = epics.get(subtask.getEpicId());
-            epic.getSubtasksList().remove((Integer) subtask.getId());
-            updateStatusEpic(epic);
-            historyManager.remove(subTaskId);
-            subTasks.remove(subTaskId);
-        } else {
-            System.out.println("Subtask not found");
-        }
+        super.deleteSubTaskById(subTaskId);
+        save();
     }
 
-
+    //изменил логику данного метода
     @Override
     public void deleteAllTasks() {
-        for (Integer taskId : tasks.keySet()) {
-            historyManager.remove(taskId);
-        }
-        tasks.clear();
+        super.deleteAllTasks();
+        save();
     }
 
+    //изменил логику данного метода
     @Override
     public void deleteAllEpics() {
-        for (Integer id : epics.keySet()) {
-            subTasks.remove(id);
-            historyManager.remove(id);
-        }
-        epics.clear();
-
-        for (Integer subTaskId : subTasks.keySet()){
-            historyManager.remove(subTaskId);
-        }
-        subTasks.clear();
+        super.deleteAllEpics();
+        save();
     }
 
+    //изменил логику данного метода
     @Override
     public void deleteAllSubTask() {
-        for (Subtask sub : subTasks.values()) {
-            tasks.remove(sub);
-            historyManager.remove(sub.getId());
-        }
-        subTasks.clear();
+        super.deleteAllSubTask();
+        save();
     }
 
+
+    //изменил логику данного метода
     @Override
     public Task getTaskById(int taskId) {
-        Task task = tasks.get(taskId);
-        if (task != null) {
-            historyManager.add(task);
-        }
-        return task;
-    }
-
-    @Override
-    public Epic getEpicById(int epicId) {
-        Epic epic = epics.get(epicId);
-        if (epic != null) {
-            historyManager.add(epic);
-        }
-        return epic;
-    }
-
-    @Override
-    public Subtask getSubTaskById(int subTaskId) {
-        Subtask subtask = subTasks.get(subTaskId);
-        if (subtask != null) {
-            historyManager.add(subtask);
-        }
-        return subtask;
-    }
-
-    @Override
-    public List<Task> getAllTask() {
-        if (tasks.isEmpty()) {
-            System.out.println("Task list пуст");
-        }
-        return new ArrayList<>(tasks.values());
-    }
-
-    @Override
-    public List<Epic> getAllEpic() {
-        if (epics.isEmpty()) {
-            System.out.println("Epic list пуст");
-        }
-        return new ArrayList<>(epics.values());
-    }
-
-    @Override
-    public List<Subtask> getAllSubTask() {
-        if (subTasks.isEmpty()) {
-            System.out.println("SubTask list пуст");
-        }
-        return new ArrayList<>(subTasks.values());
-    }
-
-    @Override
-    public List<Subtask> getAllSubTaskByEpicId(int epicId) {
-        if (epics.containsKey(id)) {
-            List<Subtask> subTasksNew = new ArrayList<>();
-            Epic epic = epics.get(id);
-            for (int i = 0; i < epic.getSubtasksList().size(); i++) {
-                subTasksNew.add(subTasks.get(epic.getSubtasksList().get(i)));
-            }
-            return subTasksNew;
-        } else {
-            System.out.println("SubTask list пуст");
-        }
+        super.getTaskById(taskId);
+        save();
         return null;
     }
 
+    //изменил логику данного метода
     @Override
-    public void updateTask(Task task) {
-        if (tasks.containsKey(task.getId())) {
-            tasks.put(task.getId(), task);
-        } else {
-            System.out.println("Task не найден");
-        }
+    public Subtask getSubTaskById(int subTaskId) {
+        super.getSubTaskById(subTaskId);
+        save();
+        return null;
     }
 
+    //изменил логику данного метода
     @Override
-    public void updateEpic(Epic epic) {
-        if (epics.containsKey(epic.getId())) {
-            epics.put(epic.getId(), epic);
-        } else {
-            System.out.println("Task не найден");
-        }
+    public Epic getEpicById(int epicId) {
+        super.getEpicById(epicId);
+        save();
+        return null;
     }
-
-    private void updateStatusEpic(Epic epic) {
-        if (epic.getSubtasksList().isEmpty()) {
-            epic.setStatus(Status.NEW);
-        } else {
-            int countDone = 0;
-            int countNew = 0;
-
-            List<Integer> subTaskIds = epic.getSubtasksList();
-            for (Integer subTaskId: subTaskIds){
-                for (int i = 0; i < epic.getSubtasksList().size(); i++) {
-                    Subtask subTask = subTasks.get(subTaskId);
-
-
-                    if (subTask.getStatus() == Status.DONE) {
-                        countDone++;
-                    }
-                    if (subTask.getStatus() == Status.NEW) {
-                        countNew++;
-                    }
-                    if (subTask.getStatus() == Status.IN_PROGRESS) {
-                        epic.setStatus(Status.IN_PROGRESS);
-                        return;
-                    }
-                }
-            }
-
-            if (countDone == epic.getSubtasksList().size()) {
-                epic.setStatus(Status.DONE);
-            } else if (countNew == epic.getSubtasksList().size()) {
-                epic.setStatus(Status.NEW);
-            } else {
-                epic.setStatus(Status.IN_PROGRESS);
-            }
-        }
-    }
-
-    @Override
-    public void updateSubtask(Subtask subTask) {
-        if (subTasks.containsKey(subTask.getId())) {
-            subTasks.put(subTask.getId(), subTask);
-            Epic epic = epics.get(subTask.getEpicId());
-            updateStatusEpic(epic);
-        } else {
-            System.out.println("SubTask не найден");
-        }
-    }
-
-
-    public List<Task> getHistory() {
-        return historyManager.getHistory();
-    }
-
-
-    @Override
-    public void printTasks() {
-        if (tasks.isEmpty()) {
-            System.out.println("Task List пуст");
-            return;
-        }
-        for (Task task : tasks.values()) {
-            System.out.println("Task{" +
-                    "description='" + task.getDescription() + '\'' +
-                    ", id=" + task.getId() +
-                    ", name='" + task.getTitle() + '\'' +
-                    ", status=" + task.getStatus() +
-                    '}');
-        }
-    }
-
-    @Override
-    public void printEpics() {
-        if (epics.isEmpty()) {
-            System.out.println("Epic List пуст");
-            return;
-        }
-        for (Epic epic : epics.values()) {
-            System.out.println("Epic{" +
-                    "subtasksIds=" + epic.getSubtasksList() +
-                    ", description='" + epic.getDescription() + '\'' +
-                    ", id=" + epic.getId() +
-                    ", name='" + epic.getTitle() + '\'' +
-                    ", status=" + epic.getStatus() +
-                    '}');
-        }
-    }
-
-    @Override
-    public void printSubTask() {
-        if (subTasks.isEmpty()) {
-            System.out.println("SubTask List пуст");
-            return;
-        }
-        for (Subtask subTask : subTasks.values()) {
-            System.out.println("Subtask{" +
-                    "epicId=" + subTask.getEpicId() +
-                    ", description='" + subTask.getDescription() + '\'' +
-                    ", id=" + subTask.getId() +
-                    ", name='" + subTask.getTitle() + '\'' +
-                    ", status=" + subTask.getStatus() +
-                    '}');
-        }
-    }
+    // убрал не нужные методы из этого класса
 }

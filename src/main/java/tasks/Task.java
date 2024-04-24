@@ -22,7 +22,7 @@ public class Task {
         this.status = status;
     }
 
-    public Task(FileBackedTasksManager.TaskType type, String description) {
+    public Task(TaskType type, String description) {
     }
 
     public Task(String s, String description) {
