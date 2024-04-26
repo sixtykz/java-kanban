@@ -9,7 +9,7 @@ import main.java.tasks.Task;
 
 import java.util.*;
 
-public class InMemoryTaskManager implements TaskManager {
+public abstract class InMemoryTaskManager implements TaskManager {
 
    protected int id;
 
@@ -18,9 +18,6 @@ public class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Epic> epics = new HashMap<>();
 
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
-
-    public void assignTaskToEpic(int taskId, int epicId) {
-    }
 
     public int generateId() {
         return id++;
@@ -202,6 +199,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public abstract String toString(Task task);
+
     @Override
     public void updateEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
@@ -312,20 +311,5 @@ public class InMemoryTaskManager implements TaskManager {
                     ", status=" + subTask.getStatus() +
                     '}');
         }
-    }
-
-    protected void updateTask(int taskId, String name, Status status, String description) {
-    }
-
-    protected void completeTask(int taskId) {
-    }
-
-    public void addTask(Task task) {
-    }
-
-    public void addEpic(Epic epic) {
-    }
-
-    protected void addSubTask(Subtask subTask) {
     }
 }

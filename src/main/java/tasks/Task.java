@@ -1,7 +1,5 @@
 package main.java.tasks;
 
-import main.java.service.FileBackedTasksManager;
-
 public class Task {
     private int id;
     private String title;
@@ -20,9 +18,6 @@ public class Task {
         this.title = title;
         this.description = description;
         this.status = status;
-    }
-
-    public Task(TaskType type, String description) {
     }
 
     public Task(String s, String description) {
@@ -68,10 +63,6 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", status=" + status +
                 '}';
-    }
-
-    public boolean toCSV() {
-        return true;
     }
 
 }

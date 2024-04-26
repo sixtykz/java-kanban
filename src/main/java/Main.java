@@ -2,10 +2,7 @@ package main.java;
 
 import main.java.service.FileBackedTasksManager;
 import main.java.service.InMemoryTaskManager;
-import main.java.tasks.Epic;
-import main.java.tasks.Status;
-import main.java.tasks.Subtask;
-import main.java.tasks.Task;
+import main.java.tasks.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +11,12 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager() {
+            @Override
+            public String toString(Task task) {
+                return null;
+            }
+        };
 
         System.out.println("*** Test History ***");
         System.out.println("--- Create ---");
@@ -67,19 +69,28 @@ public class Main {
         List<Task> historyAfterRemove = manager.getHistory();
         System.out.println(historyAfterRemove);
 
-        System.out.println("--- Saving and uploading an empty file ---");
 
+        System.out.println("--- SaveAndLoadEmptyFile ---");
+        File file = File.createTempFile("empty_file", ".csv");
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+        FileBackedTasksManager.loadFromFile(file);
+        System.out.println("Save and load empty file has been successful");
 
-        System.out.println("--- Saving multiple tasks ---");
+        System.out.println("--- SaveAndLoadMultipleTasks ---");
+        file = File.createTempFile("multiple_tasks", ".csv");
+        FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(file);
 
-            Task task1 = new Task("Task 1", "Description 1");
-            Task task2 = new Task("Task 2", "Description 2");
-            Task task3 = new Task("Task 3", "Description 3");
+        Task task1 = new Task("Task 1", "Description 1");
+        Task task2 = new Task("Task 2", "Description 2");
 
-            manager.addTask(task1);
-            manager.addTask(task2);
-            manager.addTask(task3);
+        Task epic1 = new Task("Epic 1", "Description 2");
+        Task epic2 = new Task("Epic 2", "Description 2");
 
+        Task subTask1 = new Task("SubTask 1", "Description 2");
+        Task subTask2 = new Task("SubTask 2", "Description 2");
+
+        FileBackedTasksManager.loadFromFile(file);
+        System.out.println("Save and load multiple tasks has been successful");
     }
 } 
 
