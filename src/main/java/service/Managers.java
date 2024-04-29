@@ -12,10 +12,7 @@ public class Managers {
 
     public static  TaskManager getDefault() {
         return new InMemoryTaskManager() {
-            @Override
-            public String toString(Task task) {
-                return null;
-            }
+
         };
     }
 }

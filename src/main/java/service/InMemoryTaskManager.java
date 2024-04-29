@@ -9,7 +9,7 @@ import main.java.tasks.Task;
 
 import java.util.*;
 
-public abstract class InMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
 
    protected int id;
 
@@ -199,7 +199,6 @@ public abstract class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public abstract String toString(Task task);
 
     @Override
     public void updateEpic(Epic epic) {

@@ -8,24 +8,43 @@ import java.io.*;
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static File file;
-    private static Status psriority;
 
     public FileBackedTasksManager(File file) {
         FileBackedTasksManager.file = file;
     }
 
-    @Override
     public String toString(Task task) {
-        return task.getTitle() + "," + task.getDescription();
+        return task.getId() + "," + task.getTitle() + "," + task.getStatus() + "," + task.getDescription();
     }
 
     public static Task fromString(String value) {
         String[] parts = value.split(",");
-        String name = parts[0];
-        String description = parts[1];
-        int priority = Integer.parseInt(parts[2]);
+        String taskType = parts[1];
 
-        return new Task(name, description, psriority);
+        if (taskType.equals(Task.TaskType.TASK)) {
+            int id = Integer.parseInt(parts[0]);
+            String title = parts[2];
+            String status = parts[3];
+            String description = parts[4];
+
+            return new Task(id, title, status, description);
+        } else if (taskType.equals(Task.TaskType.EPIC)) {
+            int id = Integer.parseInt(parts[0]);
+            String title = parts[2];
+            String status = parts[3];
+            String description = parts[4];
+
+            return new Epic(id, title, status, description);
+        } else if (taskType.equals(Task.TaskType.SUBTASK)) {
+            int id = Integer.parseInt(parts[0]);
+            String title = parts[2];
+            String status = parts[3];
+            String description = parts[4];
+
+            return new Subtask(id, title, status, description);
+        } else {
+            return null;
+        }
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {
@@ -38,11 +57,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 if (!line.isEmpty()) {
                     Task task = fromString(line);
 
-                    if (task.getTitle().equals(TaskType.TASK)) {
+                    if (task.getTitle().equals(Task.TaskType.TASK)) {
                         fileBackedTasksManager.tasks.put(task.getId(), task);
-                    } else if (task.getTitle().equals(TaskType.EPIC)) {
+                    } else if (task.getTitle().equals(Task.TaskType.EPIC)) {
                         fileBackedTasksManager.epics.put(task.getId(), (Epic) task);
-                    } else if (task.getTitle().equals(TaskType.SUBTASK)) {
+                    } else if (task.getTitle().equals(Task.TaskType.SUBTASK)) {
                         fileBackedTasksManager.subTasks.put(task.getId(), (Subtask) task);
                     }
 

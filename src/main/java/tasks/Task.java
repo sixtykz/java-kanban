@@ -1,18 +1,10 @@
 package main.java.tasks;
 
 public class Task {
-    private int id;
-    private String title;
+    private static int id;
+    private static String title;
     private String description;
     private Status status;
-
-
-    public Task(int id, String title, String description, Status status) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-    }
 
     public Task(String title, String description, Status status) {
         this.title = title;
@@ -20,10 +12,10 @@ public class Task {
         this.status = status;
     }
 
-    public Task(String s, String description) {
+    public Task(int id, String title, String s, String description) {
     }
 
-    public int getId() {
+    public static int getId() {
         return id;
     }
 
@@ -31,7 +23,7 @@ public class Task {
         this.id = id;
     }
 
-    public String getTitle() {
+    public static String getTitle() {
         return title;
     }
 
@@ -53,6 +45,12 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public enum TaskType {
+        TASK,
+        SUBTASK,
+        EPIC
     }
 
     @Override

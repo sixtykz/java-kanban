@@ -12,10 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         InMemoryTaskManager manager = new InMemoryTaskManager() {
-            @Override
-            public String toString(Task task) {
-                return null;
-            }
+
         };
 
         System.out.println("*** Test History ***");
@@ -71,24 +68,32 @@ public class Main {
 
 
         System.out.println("--- SaveAndLoadEmptyFile ---");
+
         File file = File.createTempFile("empty_file", ".csv");
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
         FileBackedTasksManager.loadFromFile(file);
+
         System.out.println("Save and load empty file has been successful");
 
         System.out.println("--- SaveAndLoadMultipleTasks ---");
         file = File.createTempFile("multiple_tasks", ".csv");
         FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(file);
 
-        Task task1 = new Task("Task 1", "Description 1");
-        Task task2 = new Task("Task 2", "Description 2");
+        Task task1 = new Task(Task.getId(), Task.getTitle(), "Task 1", "Description 1");
+        Task task2 = new Task(Task.getId(), Task.getTitle(), "Task 2", "Description 2");
 
-        Task epic1 = new Task("Epic 1", "Description 2");
-        Task epic2 = new Task("Epic 2", "Description 2");
+        Task epic1 = new Epic(Epic.getId(), Epic.getTitle(), "Epic 1", "Description 2");
+        Task epic2 = new Epic(Epic.getId(), Epic.getTitle(), "Epic 2", "Description 2");
 
-        Task subTask1 = new Task("SubTask 1", "Description 2");
-        Task subTask2 = new Task("SubTask 2", "Description 2");
+        Task subTask1 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 1", "Description 2");
+        Task subTask2 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 2", "Description 2");
 
+        FileBackedTasksManager.loadFromFile(file);
+
+        List<Task> tasks = fileBackedTasksManager.getAllTask();
+        for (Task task : tasks) {
+            System.out.println(task.toString());
+        }
         FileBackedTasksManager.loadFromFile(file);
         System.out.println("Save and load multiple tasks has been successful");
     }
