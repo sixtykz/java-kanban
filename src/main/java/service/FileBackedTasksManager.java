@@ -21,24 +21,26 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String[] parts = value.split(",");
         String taskType = parts[1];
 
-        if (taskType.equals(Task.TaskType.TASK)) {
-            int id = Integer.parseInt(parts[0]);
+        int count = 0;
+
+        if (Task.TaskType.TASK.equals(Task.TaskType.TASK)) {
+            int id = count++;
             String title = parts[2];
-            String status = parts[3];
+            String status = Status.NEW.name();
             String description = parts[4];
 
             return new Task(id, title, status, description);
-        } else if (taskType.equals(Task.TaskType.EPIC)) {
-            int id = Integer.parseInt(parts[0]);
+        } else if (Task.TaskType.EPIC.equals(Task.TaskType.EPIC)) {
+            int id = count++;
             String title = parts[2];
-            String status = parts[3];
+            String status =  Status.NEW.name();
             String description = parts[4];
 
             return new Epic(id, title, status, description);
-        } else if (taskType.equals(Task.TaskType.SUBTASK)) {
-            int id = Integer.parseInt(parts[0]);
+        } else if (Task.TaskType.SUBTASK.equals(Task.TaskType.SUBTASK)) {
+            int id = count++;
             String title = parts[2];
-            String status = parts[3];
+            String status =  Status.NEW.name();
             String description = parts[4];
 
             return new Subtask(id, title, status, description);
@@ -77,7 +79,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return fileBackedTasksManager;
     }
 
-
     private void save() {
         try (PrintWriter writer = new PrintWriter(file)) {
             for (Task task : tasks.values()) {
@@ -109,13 +110,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
        return super.createSubTask(subTask);
         }
 
-
         @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         save();
     }
-
 
     @Override
     public void updateSubtask(Subtask subTask) {
@@ -179,5 +178,4 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
         return null;
     }
-
 }
