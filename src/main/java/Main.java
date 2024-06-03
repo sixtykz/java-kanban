@@ -85,8 +85,8 @@ public class Main {
         Task epic1 = new Epic(Epic.getId(), Epic.getTitle(), "Epic 1", "Description 2");
         Task epic2 = new Epic(Epic.getId(), Epic.getTitle(), "Epic 2", "Description 2");
 
-        Task subTask1 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 1", "Description 2");
-        Task subTask2 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 2", "Description 2");
+        Task subTask1 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 1", "Description 2", subTaskStatus);
+        Task subTask2 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 2", "Description 2", subTaskStatus);
 
         FileBackedTasksManager.loadFromFile(file);
 

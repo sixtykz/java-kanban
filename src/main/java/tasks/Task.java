@@ -12,7 +12,7 @@ public class Task {
         this.status = status;
     }
 
-    public Task(int id, String title, String s, String description) {
+    public Task(int id, String title, Status s, String description) {
     }
 
     public static int getId() {
@@ -47,11 +47,6 @@ public class Task {
         this.status = status;
     }
 
-    public enum TaskType {
-        TASK,
-        SUBTASK,
-        EPIC
-    }
 
     @Override
     public String toString() {

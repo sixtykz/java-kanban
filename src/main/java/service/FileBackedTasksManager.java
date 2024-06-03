@@ -1,6 +1,6 @@
 package main.java.service;
 
-import main.java.ManagerSaveException;
+import main.java.Exceptions.ManagerSaveException;
 import main.java.tasks.*;
 
 import java.io.*;
@@ -23,27 +23,27 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         int count = 0;
 
-        if (Task.TaskType.TASK.equals(Task.TaskType.TASK)) {
+        if (TaskType.TASK.equals(TaskType.TASK)) {
             int id = count++;
             String title = parts[2];
-            String status = Status.NEW.name();
+            Status taskStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Task(id, title, status, description);
-        } else if (Task.TaskType.EPIC.equals(Task.TaskType.EPIC)) {
+            return new Task(id, title, taskStatus, description);
+        } else if (TaskType.EPIC.equals(TaskType.EPIC)) {
             int id = count++;
             String title = parts[2];
-            String status =  Status.NEW.name();
+            Status epicStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Epic(id, title, status, description);
-        } else if (Task.TaskType.SUBTASK.equals(Task.TaskType.SUBTASK)) {
+            return new Epic(id, title, epicStatus, description);
+        } else if (TaskType.SUBTASK.equals(TaskType.SUBTASK)) {
             int id = count++;
             String title = parts[2];
-            String status =  Status.NEW.name();
+            Status subTaskStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Subtask(id, title, status, description);
+            return new Subtask(description, title, subTaskStatus, id);
         } else {
             return null;
         }
@@ -59,11 +59,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 if (!line.isEmpty()) {
                     Task task = fromString(line);
 
-                    if (task.getTitle().equals(Task.TaskType.TASK)) {
+                    if (task.getTitle().equals(TaskType.TASK)) {
                         fileBackedTasksManager.tasks.put(task.getId(), task);
-                    } else if (task.getTitle().equals(Task.TaskType.EPIC)) {
+                    } else if (task.getTitle().equals(TaskType.EPIC)) {
                         fileBackedTasksManager.epics.put(task.getId(), (Epic) task);
-                    } else if (task.getTitle().equals(Task.TaskType.SUBTASK)) {
+                    } else if (task.getTitle().equals(TaskType.SUBTASK)) {
                         fileBackedTasksManager.subTasks.put(task.getId(), (Subtask) task);
                     }
 
@@ -159,23 +159,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task getTaskById(int taskId) {
+    public void getTaskById(int taskId) {
         super.getTaskById(taskId);
         save();
-        return null;
     }
 
     @Override
-    public Subtask getSubTaskById(int subTaskId) {
+    public void getSubTaskById(int subTaskId) {
         super.getSubTaskById(subTaskId);
         save();
-        return null;
     }
 
     @Override
-    public Epic getEpicById(int epicId) {
+    public void getEpicById(int epicId) {
         super.getEpicById(epicId);
         save();
-        return null;
     }
 }

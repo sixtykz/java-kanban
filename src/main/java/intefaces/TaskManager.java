@@ -1,11 +1,9 @@
 package main.java.intefaces;
 
-import main.java.tasks.Status;
 import main.java.tasks.Epic;
 import main.java.tasks.Subtask;
 import main.java.tasks.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
@@ -29,11 +27,11 @@ public interface TaskManager {
 
     void deleteAllSubTask();
 
-    Task getTaskById(int Id);
+    void getTaskById(int Id);
 
-    Epic getEpicById(int Id);
+    void getEpicById(int Id);
 
-    Subtask getSubTaskById(int Id);
+    void getSubTaskById(int Id);
 
     List<Task> getAllTask();
 

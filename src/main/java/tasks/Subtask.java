@@ -7,8 +7,8 @@ public class Subtask extends Task {
         super(title, description, status);
     }
 
-    public Subtask(int id, String title, String status, String description) {
-        super(id, description, status, description);
+    public Subtask(int id, String title, String status, String description, Status subTaskStatus) {
+        super(id, description, subTaskStatus, description);
     }
 
 
