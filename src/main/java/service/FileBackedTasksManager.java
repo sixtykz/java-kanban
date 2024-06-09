@@ -23,21 +23,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         int count = 0;
 
-        if (TaskType.TASK.equals(TaskType.TASK)) {
+        if (TaskType.TASK.toString().equals(TaskType.TASK)) {
             int id = count++;
             String title = parts[2];
             Status taskStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
             return new Task(id, title, taskStatus, description);
-        } else if (TaskType.EPIC.equals(TaskType.EPIC)) {
+        } else if (TaskType.EPIC.toString().equals(TaskType.EPIC)) {
             int id = count++;
             String title = parts[2];
             Status epicStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
             return new Epic(id, title, epicStatus, description);
-        } else if (TaskType.SUBTASK.equals(TaskType.SUBTASK)) {
+        } else if (TaskType.SUBTASK.toString().equals(TaskType.SUBTASK)) {
             int id = count++;
             String title = parts[2];
             Status subTaskStatus = Status.valueOf(parts[3]);

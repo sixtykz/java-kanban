@@ -17,10 +17,10 @@ public class Main {
 
         System.out.println("*** Test History ***");
         System.out.println("--- Create ---");
-        manager.createTask(new Task("Описание-1", "Task-1", Status.NEW));
-        manager.createTask(new Task("Описание-2", "Task-2", Status.NEW));
-        manager.createEpic(new Epic("Описание-1", "Epic-1", Status.NEW));
-        manager.createEpic(new Epic("Описание-1", "Epic-2", Status.NEW));
+        manager.createTask(new Task(1, "Описание-1", "Task-1", Status.NEW));
+        manager.createTask(new Task(1, "Описание-2", "Task-2", Status.NEW));
+        manager.createEpic(new Epic(3, "Описание-1", "Epic-1", Status.NEW));
+        manager.createEpic(new Epic(3, "Описание-1", "Epic-2", Status.NEW));
         manager.createSubTask(new Subtask("Описание-1", "Subtask-1", Status.NEW, 3));
         manager.createSubTask(new Subtask("Описание-2", "Subtask-2", Status.NEW, 3));
         manager.createSubTask(new Subtask("Описание-3", "Subtask-3", Status.NEW, 3));
@@ -66,36 +66,27 @@ public class Main {
         List<Task> historyAfterRemove = manager.getHistory();
         System.out.println(historyAfterRemove);
 
+// Создаем задачи, подзадачи и эпики
+        Task task1 = new Task(1, "Task 1", "Description 1", Status.IN_PROGRESS);
+        Task task2 = new Task(2, "Task 2", "Description 2", Status.DONE);
 
-        System.out.println("--- SaveAndLoadEmptyFile ---");
+        Epic epic1 = new Epic(3, "Epic 1", "Description 3", Status.IN_PROGRESS);
+        Epic epic2 = new Epic(4, "Epic 2", "Description 4", Status.DONE);
 
-        File file = File.createTempFile("empty_file", ".csv");
+        Subtask subtask1 = new Subtask("Subtask 1", "Description 5", Status.IN_PROGRESS, 5);
+        Subtask subtask2 = new Subtask("Subtask 2", "Description 6", Status.DONE, 6);
+
+// Записываем в файл
+        File file = File.createTempFile("tasks", ".csv");
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+
+
+// Загружаем задачи из файла и выводим их в консоль
         FileBackedTasksManager.loadFromFile(file);
-
-        System.out.println("Save and load empty file has been successful");
-
-        System.out.println("--- SaveAndLoadMultipleTasks ---");
-        file = File.createTempFile("multiple_tasks", ".csv");
-        FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(file);
-
-        Task task1 = new Task(Task.getId(), Task.getTitle(), "Task 1", "Description 1");
-        Task task2 = new Task(Task.getId(), Task.getTitle(), "Task 2", "Description 2");
-
-        Task epic1 = new Epic(Epic.getId(), Epic.getTitle(), "Epic 1", "Description 2");
-        Task epic2 = new Epic(Epic.getId(), Epic.getTitle(), "Epic 2", "Description 2");
-
-        Task subTask1 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 1", "Description 2", subTaskStatus);
-        Task subTask2 = new Subtask(Subtask.getId(), Subtask.getTitle(), "SubTask 2", "Description 2", subTaskStatus);
-
-        FileBackedTasksManager.loadFromFile(file);
-
         List<Task> tasks = fileBackedTasksManager.getAllTask();
         for (Task task : tasks) {
             System.out.println(task.toString());
         }
-        FileBackedTasksManager.loadFromFile(file);
-        System.out.println("Save and load multiple tasks has been successful");
     }
-} 
+}
 
