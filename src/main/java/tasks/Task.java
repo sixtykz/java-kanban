@@ -1,21 +1,23 @@
 package main.java.tasks;
 
 public class Task {
-    private static int id;
-    private static String title;
+    private int id;
+    private String title;
     private String description;
     private Status status;
 
     public Task(int id, String title, String description, Status status) {
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.status = Status.valueOf(String.valueOf(status));
     }
 
-    public Task(int id, String title, Status s, String description) {
+    public Task(int id, String title, Status status, String description) {
+
     }
 
-    public static int getId() {
+
+    public int getId() {
         return id;
     }
 
@@ -23,7 +25,7 @@ public class Task {
         this.id = id;
     }
 
-    public static String getTitle() {
+    public String getTitle() {
         return title;
     }
 

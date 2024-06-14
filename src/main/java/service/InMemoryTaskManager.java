@@ -11,7 +11,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-   protected int id;
+    protected int id;
 
     protected final HashMap<Integer, Task> tasks = new HashMap<>();
     protected final HashMap<Integer, Subtask> subTasks = new HashMap<>();

@@ -2,7 +2,7 @@ package main.java.service;
 
 import main.java.tasks.Task;
 
-class Node {
+public class Node {
     private Task task;
     private Node prev;
     private Node next;

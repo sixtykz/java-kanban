@@ -1,25 +1,22 @@
 package main.java.tasks;
 
 public class Subtask extends Task {
-    private final int epicId = 0;
 
-    public Subtask(String title, String description, Status status, int epicId) {
-        super(1, title, description, status);
-    }
 
-    public Subtask(int id, String title, String status, String description, Status subTaskStatus) {
-        super(id, description, subTaskStatus, description);
+    public Subtask(int id, String title, String description, Status subTaskStatus) {
+        super(id, description, subTaskStatus, String.valueOf(Status.valueOf(description)));
     }
 
 
     public int getEpicId() {
+        int epicId = 0;
         return epicId;
     }
 
     @Override
     public String toString() {
         return "Subtask{" +
-                "epicId=" + epicId +
+                "epicId=" + getEpicId() +
                 ", description='" + getDescription() + '\'' +
                 ", id=" + getId() +
                 ", title='" + getTitle() + '\'' +

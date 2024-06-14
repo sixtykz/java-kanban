@@ -1,6 +1,6 @@
 package main.java.service;
 
-import main.java.Exceptions.ManagerSaveException;
+import main.java.exceptions.ManagerSaveException;
 import main.java.tasks.*;
 
 import java.io.*;
@@ -23,27 +23,27 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         int count = 0;
 
-        if (TaskType.TASK.toString().equals(TaskType.TASK)) {
+        if (TaskType.TASK.toString().equals(taskType)) {
             int id = count++;
             String title = parts[2];
-            Status taskStatus = Status.valueOf(parts[3]);
+            Status status = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Task(id, title, taskStatus, description);
-        } else if (TaskType.EPIC.toString().equals(TaskType.EPIC)) {
+            return new Task(id, title, status, description);
+        } else if (TaskType.EPIC.toString().equals(taskType)) {
             int id = count++;
             String title = parts[2];
             Status epicStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
             return new Epic(id, title, epicStatus, description);
-        } else if (TaskType.SUBTASK.toString().equals(TaskType.SUBTASK)) {
+        } else if (TaskType.SUBTASK.toString().equals(taskType)) {
             int id = count++;
             String title = parts[2];
             Status subTaskStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Subtask(description, title, subTaskStatus, id);
+            return new Subtask(id, description, title, subTaskStatus);
         } else {
             return null;
         }
@@ -80,15 +80,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private void save() {
-        try (PrintWriter writer = new PrintWriter(file)) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("task.csv"))) {
             for (Task task : tasks.values()) {
-                writer.println(task.toString());
+                writer.write(task.toString());
             }
             for (Epic epic : epics.values()) {
-                writer.println(epic.toString());
+                writer.write(epic.toString());
             }
             for (Subtask subtask : subTasks.values()) {
-                writer.println(subtask.toString());
+                writer.write(subtask.toString());
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Error saving data", e);
