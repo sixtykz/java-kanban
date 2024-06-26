@@ -5,20 +5,28 @@ public class Task {
     private String title;
     private String description;
     private Status status;
+    private TaskType taskType;
+
 
 
     public Task(int id, String title, String description, Status status) {
+
+    public Task(int id, String title, String description, Status status) {
         this.id = id;
+
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.status = Status.valueOf(String.valueOf(status));
     }
+
+    public Task(int id, String title, Status status, String description) {
 
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
     }
+
 
     public int getId() {
         return id;
@@ -50,6 +58,14 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
 
     @Override

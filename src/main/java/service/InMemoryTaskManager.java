@@ -11,13 +11,13 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private int id;
+    protected int id;
 
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subTasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
     public void assignTaskToEpic(int taskId, int epicId) {
     }
@@ -128,30 +128,35 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void getTaskById(int taskId) {
+
     public Task getTaskById(int taskId) {
+
         Task task = tasks.get(taskId);
         if (task != null) {
             historyManager.add(task);
         }
-        return task;
     }
 
     @Override
+    public void getEpicById(int epicId) {
+
     public Epic getEpicById(int epicId) {
+
         Epic epic = epics.get(epicId);
         if (epic != null) {
             historyManager.add(epic);
         }
-        return epic;
     }
 
     @Override
+    public void getSubTaskById(int subTaskId) {
+
     public Subtask getSubTaskById(int subTaskId) {
         Subtask subtask = subTasks.get(subTaskId);
         if (subtask != null) {
             historyManager.add(subtask);
         }
-        return subtask;
     }
 
     @Override
@@ -201,6 +206,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Task не найден");
         }
     }
+
 
     @Override
     public void updateEpic(Epic epic) {
