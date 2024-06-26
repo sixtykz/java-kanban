@@ -5,6 +5,9 @@ public class Task {
     private String title;
     private String description;
     private Status status;
+    private TaskType taskType;
+
+
 
     public Task(int id, String title, String description, Status status) {
 
@@ -57,6 +60,13 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+    }
 
     @Override
     public String toString() {

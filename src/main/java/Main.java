@@ -67,17 +67,17 @@ public class Main {
 
         List<Task> historyAfterRemove = manager.getHistory();
         System.out.println(historyAfterRemove);
+        // Создаем задачи, подзадачи и эпики
+/*
+        Task task1 = new Task(1, "Task 1", "Description 1", Status.NEW);
+        Task task2 = new Task(2, "Task 2", "Description 2", Status.NEW);
 
-// Создаем задачи, подзадачи и эпики
-        Task task1 = new Task(1, "Task 1", "Description 1", Status.IN_PROGRESS);
-        Task task2 = new Task(2, "Task 2", "Description 2", Status.DONE);
+        Epic epic1 = new Epic(3, "Epic 1", "Description 3", Status.NEW);
+        Epic epic2 = new Epic(4, "Epic 2", "Description 4", Status.NEW);
 
-        Epic epic1 = new Epic(3, "Epic 1", "Description 3", Status.IN_PROGRESS);
-        Epic epic2 = new Epic(4, "Epic 2", "Description 4", Status.DONE);
-
-        Subtask subtask1 = new Subtask(5, "Subtask 1", "Description 5", Status.IN_PROGRESS);
-        Subtask subtask2 = new Subtask(6, "Subtask 2", "Description 6", Status.DONE);
-
+        Subtask subtask1 = new Subtask(5, "Subtask 1", "Description 5", Status.NEW);
+        Subtask subtask2 = new Subtask(6, "Subtask 2", "Description 6", Status.NEW);
+*/
 // Записываем в файл
         File file = File.createTempFile("tasks", ".csv");
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
