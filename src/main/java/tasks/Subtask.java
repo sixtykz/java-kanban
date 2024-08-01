@@ -4,7 +4,7 @@ public class Subtask extends Task {
 
 
     public Subtask(int id, String title, String description, Status subTaskStatus) {
-        super(id, description, subTaskStatus, String.valueOf(Status.valueOf(description)));
+        super(id, description, subTaskStatus, description);
     }
 
 
