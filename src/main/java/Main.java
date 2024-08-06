@@ -6,6 +6,7 @@ import main.java.tasks.*;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.List;
 
 public class Main {
@@ -68,6 +69,7 @@ public class Main {
         List<Task> historyAfterRemove = manager.getHistory();
         System.out.println(historyAfterRemove);
 
+
 // Создаем задачи, подзадачи и эпики
         Task task1 = new Task(1, "Task 1", "Description 1", Status.IN_PROGRESS);
         Task task2 = new Task(2, "Task 2", "Description 2", Status.DONE);
@@ -89,6 +91,15 @@ public class Main {
         for (Task task : tasks) {
             System.out.println(task.toString());
         }
+
+        System.out.println("--- saving and uploading an empty file ---");
+        FileBackedTasksManager fileManager = new FileBackedTasksManager(new File("tasks.txt"));
+        fileManager.save();
+
+        System.out.println("--- saving multiple tasks ---");
+        Task task1 = new Task(1, "Task 1", "Description 1", Status.DONE);
+        fileManager.addTask(task1);
+        fileManager.save();
     }
 }
 
