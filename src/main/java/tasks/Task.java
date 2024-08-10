@@ -8,6 +8,9 @@ public class Task {
     public TaskType taskType;
 
     public Task(int id, String title, String description, Status status) {
+
+    public Task(int id, String title, String description, Status status) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -15,6 +18,10 @@ public class Task {
 
     public Task(int id, String title, Status status, String description) {
 
+    public Task(String title, String description, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
     }
 
 
@@ -61,4 +68,7 @@ public class Task {
                 '}';
     }
 
+    public boolean toCSV() {
+        return true;
+    }
 }
