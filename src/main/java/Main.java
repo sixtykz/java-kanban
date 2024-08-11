@@ -3,6 +3,10 @@ package main.java;
 import main.java.service.FileBackedTasksManager;
 import main.java.service.InMemoryTaskManager;
 import main.java.tasks.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +26,8 @@ public class Main {
         System.out.println("--- Create ---");
         manager.createTask(new Task(1, "Описание-1", "Task-1", Status.NEW));
         manager.createTask(new Task(1, "Описание-2", "Task-2", Status.NEW));
-        manager.createEpic(new Epic(3, "Описание-1", "Epic-1", Status.NEW));
-        manager.createEpic(new Epic(3, "Описание-1", "Epic-2", Status.NEW));
+        manager.createEpic(new Epic(3, "Описание-1", ("Epic-1"), Status.NEW));
+        manager.createEpic(new Epic(3, "Описание-1",("Epic-2"), Status.NEW));
         manager.createSubTask(new Subtask(3, "Описание-1", "Subtask-1", Status.NEW));
         manager.createSubTask(new Subtask(3, "Описание-2", "Subtask-2", Status.NEW));
         manager.createSubTask(new Subtask(3, "Описание-3", "Subtask-3", Status.NEW));
@@ -73,32 +77,68 @@ public class Main {
 // Создаем задачи, подзадачи и эпики
         Task task1 = new Task(1, "Task 1", "Description 1", Status.IN_PROGRESS);
         Task task2 = new Task(2, "Task 2", "Description 2", Status.DONE);
-
         Epic epic1 = new Epic(3, "Epic 1", "Description 3", Status.IN_PROGRESS);
         Epic epic2 = new Epic(4, "Epic 2", "Description 4", Status.DONE);
 
-        Subtask subtask1 = new Subtask(5, "Subtask 1", "Description 5", Status.IN_PROGRESS);
-        Subtask subtask2 = new Subtask(6, "Subtask 2", "Description 6", Status.DONE);
+        Subtask subtask1 = new Subtask("Subtask 1", "Description 5", Status.IN_PROGRESS, 5);
+        Subtask subtask2 = new Subtask("Subtask 2", "Description 6", Status.DONE, 6);
+        subtask1 = new Subtask(5, "Subtask 1", "Description 5", Status.IN_PROGRESS);
+        subtask2 = new Subtask(6, "Subtask 2", "Description 6", Status.DONE);
 
 // Записываем в файл
         File file = File.createTempFile("tasks", ".csv");
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
-
-
 // Загружаем задачи из файла и выводим их в консоль
         FileBackedTasksManager.loadFromFile(file);
         List<Task> tasks = fileBackedTasksManager.getAllTask();
         for (Task task : tasks) {
             System.out.println(task.toString());
         }
-        System.out.println("--- saving and uploading an empty file ---");
-        FileBackedTasksManager fileManager = new FileBackedTasksManager(new File("tasks.txt"));
-        fileManager.save();
-
-        System.out.println("--- saving multiple tasks ---");
-        Task task1 = new Task(1, "Task 1", "Description 1", Status.DONE);
-        fileManager.addTask(task1);
-        fileManager.save();
     }
+
+    @Nested
+    class TaskManagerTest {
+        private InMemoryTaskManager manager;
+
+        @BeforeEach
+        public void setUp() {
+            manager = new InMemoryTaskManager();
+        }
+
+        @AfterEach
+        public void tearDown() {
+            manager.deleteAllTasks();
+            manager.deleteAllEpics();
+            manager.deleteAllSubTask();
+        }
+
+        @Test
+        public void testCreateAndGetTask() {
+            Task task = new Task(1, "Test Task", "Description", Status.NEW);
+            manager.createTask(task);
+        }
+
+        @Test
+        public void testDeleteTask() {
+            manager.createTask(new Task(1, "Task to Delete", "Description", Status.NEW));
+            manager.deleteTaskById(1);
+        }
+
+        @Test
+        public void testGetHistory() {
+            Task task = new Task(1, "History Task", "Description", Status.NEW);
+            manager.createTask(task);
+            manager.getTaskById(1); // Access task to add to history
+            List<Task> history = manager.getHistory();
+        }
+
+        @Test
+        public void testSaveAndLoadFromFile() throws IOException {
+            File file = File.createTempFile("test_tasks", ".csv");
+            manager.createTask(new Task(1, "File Task", "Description", Status.NEW));
+            InMemoryTaskManager loadedManager = FileBackedTasksManager.loadFromFile(file);
+        }
+    }
+
 }
 

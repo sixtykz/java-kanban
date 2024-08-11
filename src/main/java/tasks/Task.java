@@ -8,20 +8,19 @@ public class Task {
     public TaskType taskType;
 
     public Task(int id, String title, String description, Status status) {
-
-    public Task(int id, String title, String description, Status status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
     }
 
-    public Task(int id, String title, Status status, String description) {
+    public Task(int id, String title, Status s, Status status) {
+    }
 
-    public Task(String title, String description, Status status) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
+    public Task(int id, String description, Status subTaskStatus, String description1) {
+    }
+
+    public Task(String s, String title, Status status, int i) {
     }
 
 
