@@ -14,15 +14,6 @@ public class Task {
         this.status = status;
     }
 
-    public Task(int id, String title, Status s, Status status) {
-    }
-
-    public Task(int id, String description, Status subTaskStatus, String description1) {
-    }
-
-    public Task(String s, String title, Status status, int i) {
-    }
-
 
     public int getId() {
         return id;

@@ -2,25 +2,22 @@ package main.java;
 
 import main.java.service.FileBackedTasksManager;
 import main.java.service.InMemoryTaskManager;
-import main.java.tasks.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import main.java.service.Managers;
+import main.java.tasks.Epic;
+import main.java.tasks.Status;
+import main.java.tasks.Subtask;
+import main.java.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        InMemoryTaskManager manager = Managers.getDefault();
 
-        InMemoryTaskManager manager = new InMemoryTaskManager() {
-
-        };
 
         System.out.println("*** Test History ***");
         System.out.println("--- Create ---");
@@ -80,14 +77,14 @@ public class Main {
         Epic epic1 = new Epic(3, "Epic 1", "Description 3", Status.IN_PROGRESS);
         Epic epic2 = new Epic(4, "Epic 2", "Description 4", Status.DONE);
 
-        Subtask subtask1 = new Subtask("Subtask 1", "Description 5", Status.IN_PROGRESS, 5);
-        Subtask subtask2 = new Subtask("Subtask 2", "Description 6", Status.DONE, 6);
+        Subtask subtask1 = new Subtask(5, "Subtask 1", "Description 5", Status.IN_PROGRESS);
+        Subtask subtask2 = new Subtask(6, "Subtask 2", "Description 6", Status.DONE);
         subtask1 = new Subtask(5, "Subtask 1", "Description 5", Status.IN_PROGRESS);
         subtask2 = new Subtask(6, "Subtask 2", "Description 6", Status.DONE);
 
 // Записываем в файл
         File file = File.createTempFile("tasks", ".csv");
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+        FileBackedTasksManager fileBackedTasksManager = Managers.getDefaultManager(file);
 // Загружаем задачи из файла и выводим их в консоль
         FileBackedTasksManager.loadFromFile(file);
         List<Task> tasks = fileBackedTasksManager.getAllTask();
@@ -95,50 +92,7 @@ public class Main {
             System.out.println(task.toString());
         }
     }
-
-    @Nested
-    class TaskManagerTest {
-        private InMemoryTaskManager manager;
-
-        @BeforeEach
-        public void setUp() {
-            manager = new InMemoryTaskManager();
-        }
-
-        @AfterEach
-        public void tearDown() {
-            manager.deleteAllTasks();
-            manager.deleteAllEpics();
-            manager.deleteAllSubTask();
-        }
-
-        @Test
-        public void testCreateAndGetTask() {
-            Task task = new Task(1, "Test Task", "Description", Status.NEW);
-            manager.createTask(task);
-        }
-
-        @Test
-        public void testDeleteTask() {
-            manager.createTask(new Task(1, "Task to Delete", "Description", Status.NEW));
-            manager.deleteTaskById(1);
-        }
-
-        @Test
-        public void testGetHistory() {
-            Task task = new Task(1, "History Task", "Description", Status.NEW);
-            manager.createTask(task);
-            manager.getTaskById(1); // Access task to add to history
-            List<Task> history = manager.getHistory();
-        }
-
-        @Test
-        public void testSaveAndLoadFromFile() throws IOException {
-            File file = File.createTempFile("test_tasks", ".csv");
-            manager.createTask(new Task(1, "File Task", "Description", Status.NEW));
-            InMemoryTaskManager loadedManager = FileBackedTasksManager.loadFromFile(file);
-        }
-    }
-
 }
+
+
 

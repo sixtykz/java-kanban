@@ -4,11 +4,7 @@ public class Subtask extends Task {
 
 
     public Subtask(int id, String title, String description, Status subTaskStatus) {
-        super(id, description, subTaskStatus, description);
-    }
-
-    public Subtask(String s, String title, Status status, int i) {
-        super(s, title, status, i);
+        super(id, title, description, subTaskStatus);
     }
 
 

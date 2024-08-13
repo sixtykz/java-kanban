@@ -21,24 +21,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String[] parts = value.split(",");
         String taskType = parts[1];
 
-        int count = 0;
 
         if (TaskType.TASK.toString().equals(taskType)) {
-            int id = count++;
+            int id = Integer.parseInt(parts[0]);
             String title = parts[2];
             Status status = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Task(id, title, status, Status.valueOf(description));
+            return new Task(id, title, description, status);
         } else if (TaskType.EPIC.toString().equals(taskType)) {
-            int id = count++;
+            int id = Integer.parseInt(parts[0]);
             String title = parts[2];
             Status epicStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
             return new Epic(id, title, epicStatus, description);
         } else if (TaskType.SUBTASK.toString().equals(taskType)) {
-            int id = count++;
+            int id = Integer.parseInt(parts[0]);
             String title = parts[2];
             Status subTaskStatus = Status.valueOf(parts[3]);
             String description = parts[4];
@@ -80,7 +79,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private void save() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("task.csv"))) {
+        try (final BufferedWriter writer = new BufferedWriter(new FileWriter("task.csv"))) {
             for (Task task : tasks.values()) {
                 writer.write(task.toString());
             }
@@ -159,20 +158,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void getTaskById(int taskId) {
+    public Task getTaskById(int taskId) {
         super.getTaskById(taskId);
         save();
+        return null;
     }
 
     @Override
-    public void getSubTaskById(int subTaskId) {
+    public Subtask getSubTaskById(int subTaskId) {
         super.getSubTaskById(subTaskId);
         save();
+        return null;
     }
 
     @Override
-    public void getEpicById(int epicId) {
+    public Epic getEpicById(int epicId) {
         super.getEpicById(epicId);
         save();
+        return null;
     }
 }

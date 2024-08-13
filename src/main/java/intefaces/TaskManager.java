@@ -27,11 +27,11 @@ public interface TaskManager {
 
     void deleteAllSubTask();
 
-    void getTaskById(int Id);
+    Task getTaskById(int Id);
 
-    void getEpicById(int Id);
+    Epic getEpicById(int Id);
 
-    void getSubTaskById(int Id);
+    Subtask getSubTaskById(int Id);
 
     List<Task> getAllTask();
 

@@ -1,7 +1,6 @@
 package main.java.service;
 
 import main.java.intefaces.HistoryManager;
-import main.java.intefaces.TaskManager;
 
 import java.io.File;
 
@@ -11,11 +10,11 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    public static TaskManager getDefault() {
+    public static InMemoryTaskManager getDefault() {
         return new InMemoryTaskManager();
     }
-    public static FileBackedTasksManager getDefaultManager(File File){
-        return new FileBackedTasksManager(File);
+    public static FileBackedTasksManager getDefaultManager(File file){
+        return new FileBackedTasksManager(file);
     }
 
 }
