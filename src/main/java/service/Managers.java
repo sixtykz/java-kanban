@@ -6,6 +6,8 @@ import java.io.File;
 
 public class Managers {
 
+    private static File file;
+
     public static  HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
@@ -13,7 +15,7 @@ public class Managers {
     public static InMemoryTaskManager getDefault() {
         return new InMemoryTaskManager();
     }
-    public static FileBackedTasksManager getDefaultManager(File file){
+    public static FileBackedTasksManager getDefaultManager() {
         return new FileBackedTasksManager(file);
     }
 

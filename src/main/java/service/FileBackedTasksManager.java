@@ -13,9 +13,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager.file = file;
     }
 
-    public String toString(Task task) {
-        return task.getId() + "," + task.getTitle() + "," + task.getStatus() + "," + task.getDescription();
-    }
 
     public static Task fromString(String value) {
         String[] parts = value.split(",");
@@ -35,14 +32,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             Status epicStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Epic(id, title, epicStatus, description);
+            return new Epic(id, title, description, epicStatus);
         } else if (TaskType.SUBTASK.toString().equals(taskType)) {
             int id = Integer.parseInt(parts[0]);
             String title = parts[2];
             Status subTaskStatus = Status.valueOf(parts[3]);
             String description = parts[4];
 
-            return new Subtask(id, description, title, subTaskStatus);
+            return new Subtask(id, title, description, subTaskStatus);
         } else {
             return null;
         }
@@ -79,15 +76,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private void save() {
-        try (final BufferedWriter writer = new BufferedWriter(new FileWriter("task.csv"))) {
+
+         final String FILE_PATH = "task.csv";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Task task : tasks.values()) {
                 writer.write(task.toString());
+                writer.newLine();
             }
             for (Epic epic : epics.values()) {
                 writer.write(epic.toString());
+                writer.newLine();
             }
             for (Subtask subtask : subTasks.values()) {
                 writer.write(subtask.toString());
+                writer.newLine();
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Error saving data", e);

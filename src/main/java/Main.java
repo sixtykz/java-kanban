@@ -84,7 +84,7 @@ public class Main {
 
 // Записываем в файл
         File file = File.createTempFile("tasks", ".csv");
-        FileBackedTasksManager fileBackedTasksManager = Managers.getDefaultManager(file);
+        FileBackedTasksManager fileBackedTasksManager = Managers.getDefaultManager();
 // Загружаем задачи из файла и выводим их в консоль
         FileBackedTasksManager.loadFromFile(file);
         List<Task> tasks = fileBackedTasksManager.getAllTask();
