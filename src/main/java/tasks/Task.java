@@ -5,7 +5,7 @@ public class Task {
     private String title;
     private String description;
     private Status status;
-
+    public TaskType taskType;
 
     public Task(int id, String title, String description, Status status) {
         this.id = id;
@@ -14,11 +14,6 @@ public class Task {
         this.status = status;
     }
 
-    public Task(String title, String description, Status status) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
-    }
 
     public int getId() {
         return id;
@@ -51,6 +46,7 @@ public class Task {
     public void setStatus(Status status) {
         this.status = status;
     }
+
 
     @Override
     public String toString() {

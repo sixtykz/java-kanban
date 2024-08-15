@@ -1,11 +1,9 @@
 package main.java.intefaces;
 
-import main.java.tasks.Status;
 import main.java.tasks.Epic;
 import main.java.tasks.Subtask;
 import main.java.tasks.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
