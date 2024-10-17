@@ -18,7 +18,6 @@ public class Main {
 
         InMemoryTaskManager manager = Managers.getDefault();
 
-
         System.out.println("*** Test History ***");
         System.out.println("--- Create ---");
         manager.createTask(new Task(1, "Описание-1", "Task-1", Status.NEW));
@@ -58,7 +57,6 @@ public class Main {
         System.out.println("--- Delete all epics ---");
         manager.deleteAllEpics();
         manager.printEpics();
-
 
         System.out.println("--- Get History ---");
         List<Task> history = manager.getHistory();

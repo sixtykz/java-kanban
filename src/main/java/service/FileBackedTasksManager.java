@@ -13,6 +13,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager.file = file;
     }
 
+    public String toString (Task task){
+        return task.getId() + "," + task.getTitle() + "," + task.getStatus() + "," + task.getDescription();
+    }
+
 
     public static Task fromString(String value) {
         String[] parts = value.split(",");

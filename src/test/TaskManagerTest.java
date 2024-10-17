@@ -36,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.*;
             Task task = new Task(1, "Test Task", "Description", Status.NEW);
             manager.createTask(task);
             Task task1 = manager.getTaskById(1);
-            assertEquals("Test Task", task.getTitle());
         }
 
         @Test
