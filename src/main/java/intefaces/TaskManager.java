@@ -45,10 +45,10 @@ public interface TaskManager {
 
     void updateEpic(Epic epic);
 
-
     void updateSubtask(Subtask subTask);
 
     List<Task> getPrioritizedTasks();
+
     void printTasks();
 
     void printEpics();

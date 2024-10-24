@@ -14,38 +14,30 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public String toString (Task task){
-        return task.getId() + "," + task.getTitle() + "," + task.getStatus() + "," + task.getDescription();
+        String[] toJoin = {Integer.toString(task.getId()), TaskType.TASK.toString(), task.getTitle(),
+                task.getStatus().toString(), task.getDescription(), String.valueOf(task.getStartTime()),
+                String.valueOf(task.getDuration())};
+        return String.join(",", toJoin);
     }
 
 
     public static Task fromString(String value) {
         String[] parts = value.split(",");
         String taskType = parts[1];
+        int id = Integer.parseInt(parts[0]);
+        String title = parts[2];
+        Status status = Status.valueOf(parts[3]);
+        String description = parts[4];
 
-
-        if (TaskType.TASK.toString().equals(taskType)) {
-            int id = Integer.parseInt(parts[0]);
-            String title = parts[2];
-            Status status = Status.valueOf(parts[3]);
-            String description = parts[4];
-
-            return new Task(id, title, description, status);
-        } else if (TaskType.EPIC.toString().equals(taskType)) {
-            int id = Integer.parseInt(parts[0]);
-            String title = parts[2];
-            Status epicStatus = Status.valueOf(parts[3]);
-            String description = parts[4];
-
-            return new Epic(id, title, description, epicStatus);
-        } else if (TaskType.SUBTASK.toString().equals(taskType)) {
-            int id = Integer.parseInt(parts[0]);
-            String title = parts[2];
-            Status subTaskStatus = Status.valueOf(parts[3]);
-            String description = parts[4];
-
-            return new Subtask(id, title, description, subTaskStatus);
-        } else {
-            return null;
+        switch (taskType) {
+            case "TASK":
+                return new Task(id, title, description, status);
+            case "EPIC":
+                return new Epic(id, title, description, status);
+            case "SUBTASK":
+                return new Subtask(id, title, description, status);
+            default:
+                return null;
         }
     }
 
@@ -103,17 +95,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public int createTask(Task task) {
-        return super.createTask(task);
+        super.createTask(task);
+        save();
+        return task.getId();
     }
 
     @Override
     public int createEpic(Epic epic) {
-        return super.createEpic(epic);
+        super.createEpic(epic);
+        save();
+        return epic.getId();
     }
 
     @Override
     public int createSubTask(Subtask subTask) {
-        return super.createSubTask(subTask);
+        super.createSubTask(subTask);
+        save();
+        return subTask.getId();
     }
 
     @Override
@@ -166,22 +164,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public Task getTaskById(int taskId) {
-        super.getTaskById(taskId);
+        Task task = super.getTaskById(taskId);
         save();
-        return null;
+        return task;
     }
 
     @Override
     public Subtask getSubTaskById(int subTaskId) {
-        super.getSubTaskById(subTaskId);
+        Subtask subtask = super.getSubTaskById(subTaskId);
         save();
-        return null;
+        return subtask;
     }
 
     @Override
     public Epic getEpicById(int epicId) {
-        super.getEpicById(epicId);
+        Epic epic = super.getEpicById(epicId);
         save();
-        return null;
+        return epic;
     }
 }
