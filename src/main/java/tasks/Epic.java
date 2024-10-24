@@ -1,18 +1,22 @@
 package main.java.tasks;
 
 import java.util.ArrayList;
+import java.time.Instant;
+
 
 public class Epic extends Task {
     private final ArrayList<Integer> subtasksList = new ArrayList<>();
+    private transient Instant endTime;
 
-    public Epic(String title, String description, Status status) {
-        super(title, description, status);
-
+    public Epic(int id, String title,  String description, Status epicStatus, Instant startTime, long duration) {
+        super(id, title, description, epicStatus, startTime, duration);
+        this.endTime = super.getEndTime();
     }
 
-    public Epic(String description, String name, Status status, int id) {
-        super(id, description, name, status);
+    public Epic(int id, String title, String description, Status status) {
+        super(id, title, description, status);
     }
+
 
     public ArrayList<Integer> getSubtasksList() {
         return subtasksList;
@@ -22,18 +26,21 @@ public class Epic extends Task {
         subtasksList.add(id);
     }
 
-    public void cleanSubtaskIds() {
-        subtasksList.clear();
+
+    @Override
+    public Instant getEndTime() {
+        return endTime;
     }
-    public void removeSubtask(int id) {
-        subtasksList.remove((Integer) id);
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
     @Override
     public String toString() {
         return "Epic{" +
                 "id=" + getId() +
-                ", subtasksList=" + subtasksList +
+                ", subtasksList=" + getSubtasksList() +
                 ", title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", status='" + getStatus() + '\''
