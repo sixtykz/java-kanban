@@ -4,6 +4,7 @@ import main.java.exceptions.ManagerSaveException;
 import main.java.tasks.*;
 
 import java.io.*;
+import java.time.Instant;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
@@ -28,6 +29,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String title = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
+        Instant startTime = Instant.parse(parts[5]);
+        long duration = Long.parseLong(parts[6]);
 
         switch (taskType) {
             case "TASK":
@@ -112,6 +115,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         super.createSubTask(subTask);
         save();
         return subTask.getId();
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        super.updateTask(task);
+        save();
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Task {
 
     }
 
-    public Task(int id, String testTask, String description, Status status) {
+    public Task(int id, String title, String description, Status status) {
     }
 
     public Task(String description, String title, Status status, Instant now, int i) {
@@ -77,7 +77,7 @@ public class Task {
     }
 
     public Instant getEndTime() {
-        long SECONDS_IN_MINUTE = 60L;
+       final long SECONDS_IN_MINUTE = 60L;
         return startTime.plusSeconds(duration * SECONDS_IN_MINUTE);
     }
 
