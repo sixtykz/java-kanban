@@ -77,10 +77,10 @@ public class Task {
     }
 
     public Instant getEndTime() {
-       final long SECONDS_IN_MINUTE = 60L;
-        return startTime.plusSeconds(duration * SECONDS_IN_MINUTE);
+        final long SECONDS_IN_MINUTE = 60L;
+        long totalSeconds = duration * SECONDS_IN_MINUTE;
+        return startTime.plusSeconds(totalSeconds);
     }
-
 
     @Override
     public String toString() {

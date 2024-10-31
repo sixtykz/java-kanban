@@ -15,7 +15,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public String toString (Task task){
-        String[] toJoin = {Integer.toString(task.getId()), TaskType.TASK.toString(), task.getTitle(),
+        String[] toJoin = {Integer.toString(task.getId()), task.toString(), task.getTitle(),
                 task.getStatus().toString(), task.getDescription(), String.valueOf(task.getStartTime()),
                 String.valueOf(task.getDuration())};
         return String.join(",", toJoin);
@@ -34,11 +34,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         switch (taskType) {
             case "TASK":
-                return new Task(id, title, description, status);
+                return new Task(id, title, description, status, startTime, duration);
             case "EPIC":
-                return new Epic(id, title, description, status);
+                return new Epic(id, title, description, status, startTime, duration);
             case "SUBTASK":
-                return new Subtask(id, title, description, status);
+                return new Subtask(id, title, description, status, startTime, duration);
             default:
                 return null;
         }
