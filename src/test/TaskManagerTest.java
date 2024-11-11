@@ -37,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.*;
             manager.createTask(task);
             Task task1 = manager.getTaskById(1);
         }
-
         @Test
         public void testDeleteTask() {
             manager.createTask(new Task(1, "Task to Delete", "Description", Status.NEW));
