@@ -1,13 +1,18 @@
 package main.java.tasks;
 
-public class Subtask extends Task {
-    private final int epicId;
+import java.time.Instant;
 
-    public Subtask(String title, String description, Status status, int epicId) {
-        super(title, description, status);
+public class Subtask extends Task {
+    private int epicId;
+
+    public Subtask(int id, String title, String description, Status subTaskStatus, Instant startTime, long duration) {
+        super(id, title, description, subTaskStatus, startTime, duration);
         this.epicId = epicId;
     }
 
+    public Subtask(int id, String title, String description, Status status) {
+        super(id, title, description, status);
+    }
 
     public int getEpicId() {
         return epicId;
@@ -16,7 +21,7 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         return "Subtask{" +
-                "epicId=" + epicId +
+                "epicId=" + getEpicId() +
                 ", description='" + getDescription() + '\'' +
                 ", id=" + getId() +
                 ", title='" + getTitle() + '\'' +
